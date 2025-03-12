@@ -1,0 +1,15 @@
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Application\bin\Debug\net8.0\Messenger.Application.deps.json
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Application\bin\Debug\net8.0\Messenger.Application.dll
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Application\bin\Debug\net8.0\Messenger.Application.pdb
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Application\bin\Debug\net8.0\Messenger.Domain.dll
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Application\bin\Debug\net8.0\Messenger.Domain.pdb
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Application\obj\Debug\net8.0\Messenger.Application.csproj.AssemblyReference.cache
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Application\obj\Debug\net8.0\Messenger.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Application\obj\Debug\net8.0\Messenger.Application.AssemblyInfoInputs.cache
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Application\obj\Debug\net8.0\Messenger.Application.AssemblyInfo.cs
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Application\obj\Debug\net8.0\Messenger.Application.csproj.CoreCompileInputs.cache
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Application\obj\Debug\net8.0\Messenger.Application.csproj.CopyComplete
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Application\obj\Debug\net8.0\Messenger.Application.dll
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Application\obj\Debug\net8.0\refint\Messenger.Application.dll
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Application\obj\Debug\net8.0\Messenger.Application.pdb
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Application\obj\Debug\net8.0\ref\Messenger.Application.dll

@@ -1,0 +1,17 @@
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Persistence\bin\Debug\net8.0\Messenger.Persistence.deps.json
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Persistence\bin\Debug\net8.0\Messenger.Persistence.dll
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Persistence\bin\Debug\net8.0\Messenger.Persistence.pdb
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Persistence\bin\Debug\net8.0\Messenger.Application.dll
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Persistence\bin\Debug\net8.0\Messenger.Domain.dll
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Persistence\bin\Debug\net8.0\Messenger.Application.pdb
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Persistence\bin\Debug\net8.0\Messenger.Domain.pdb
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Persistence\obj\Debug\net8.0\Messenger.Persistence.csproj.AssemblyReference.cache
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Persistence\obj\Debug\net8.0\Messenger.Persistence.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Persistence\obj\Debug\net8.0\Messenger.Persistence.AssemblyInfoInputs.cache
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Persistence\obj\Debug\net8.0\Messenger.Persistence.AssemblyInfo.cs
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Persistence\obj\Debug\net8.0\Messenger.Persistence.csproj.CoreCompileInputs.cache
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Persistence\obj\Debug\net8.0\Messenger.Persistence.csproj.CopyComplete
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Persistence\obj\Debug\net8.0\Messenger.Persistence.dll
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Persistence\obj\Debug\net8.0\refint\Messenger.Persistence.dll
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Persistence\obj\Debug\net8.0\Messenger.Persistence.pdb
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Persistence\obj\Debug\net8.0\ref\Messenger.Persistence.dll
