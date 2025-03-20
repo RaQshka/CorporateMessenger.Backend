@@ -97,3 +97,4 @@ C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messeng
 C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Tests\obj\Debug\net8.0\Messenger.Tests.pdb
 C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Tests\obj\Debug\net8.0\Messenger.Tests.genruntimeconfig.cache
 C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Tests\obj\Debug\net8.0\ref\Messenger.Tests.dll
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Tests\obj\Debug\net8.0\Messenger.Tests.sourcelink.json

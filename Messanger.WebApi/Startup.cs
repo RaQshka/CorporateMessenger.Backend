@@ -3,6 +3,7 @@ using Messenger.Application;
 using Messenger.Application.Common.Mappings;
 using Messenger.Application.Interfaces;
 using Messenger.Persistence;
+using Messenger.Persistence.Migrations;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Options;
@@ -28,7 +29,7 @@ namespace Notes.WebApi
             //services.AddApplication();
             services.AddPersistance(_configuration);
             services.AddControllers();
-
+            services.AddTransient<MessengerDbContextFactory>();
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowAll", policy =>

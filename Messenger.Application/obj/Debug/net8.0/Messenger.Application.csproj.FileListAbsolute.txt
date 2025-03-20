@@ -13,3 +13,4 @@ C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messeng
 C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Application\obj\Debug\net8.0\refint\Messenger.Application.dll
 C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Application\obj\Debug\net8.0\Messenger.Application.pdb
 C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Application\obj\Debug\net8.0\ref\Messenger.Application.dll
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Application\obj\Debug\net8.0\Messenger.Application.sourcelink.json

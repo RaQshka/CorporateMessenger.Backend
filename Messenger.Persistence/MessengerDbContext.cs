@@ -8,6 +8,9 @@ namespace Messenger.Persistence;
 
 public class MessengerDbContext: DbContext, IMessengerDbContext
 {
+    public MessengerDbContext(DbContextOptions<MessengerDbContext> options)
+        :base(options){}
+    
     public DbSet<User> Users { get; set; }
     public DbSet<Chat> Chats { get; set; }
     public DbSet<ChatParticipant> ChatParticipants { get; set; }
@@ -20,11 +23,6 @@ public class MessengerDbContext: DbContext, IMessengerDbContext
     public DbSet<DocumentAccessRuleRole> DocumentAccessRuleRoles { get; set; }
     public DbSet<ChatAccessRule> ChatAccessRules { get; set; }
     public DbSet<ChatAccessRuleRole> ChatAccessRuleRoles { get; set; }
-
-    public MessengerDbContext(DbContextOptions<MessengerDbContext> options):base(options)
-    {
-        
-    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

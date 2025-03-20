@@ -99,3 +99,4 @@ C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messang
 C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messanger.WebApi\obj\Debug\net8.0\Messenger.WebApi.pdb
 C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messanger.WebApi\obj\Debug\net8.0\Messenger.WebApi.genruntimeconfig.cache
 C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messanger.WebApi\obj\Debug\net8.0\ref\Messenger.WebApi.dll
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messanger.WebApi\obj\Debug\net8.0\Messenger.WebApi.sourcelink.json

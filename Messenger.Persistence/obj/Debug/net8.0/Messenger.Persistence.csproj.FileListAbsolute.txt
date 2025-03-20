@@ -15,3 +15,6 @@ C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messeng
 C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Persistence\obj\Debug\net8.0\refint\Messenger.Persistence.dll
 C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Persistence\obj\Debug\net8.0\Messenger.Persistence.pdb
 C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Persistence\obj\Debug\net8.0\ref\Messenger.Persistence.dll
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Persistence\obj\Debug\net8.0\Messenger.Persistence.sourcelink.json
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Persistence\bin\Debug\net8.0\Messenger.Persistence.runtimeconfig.json
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Persistence\obj\Debug\net8.0\Messenger.Persistence.genruntimeconfig.cache
