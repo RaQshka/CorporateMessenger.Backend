@@ -23,7 +23,6 @@
     <Folder Include="Messages\Commands\CreateMessage\" />
     <Folder Include="Messages\Commands\DeleteMessage\" />
     <Folder Include="Messages\Queries\GetMessageList\" />
-    <Folder Include="Users\Commands\RegisterUser\" />
   </ItemGroup>
 
 </Project>
