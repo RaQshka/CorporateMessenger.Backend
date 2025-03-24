@@ -1,9 +1,10 @@
-﻿using Messenger.Application.Interfaces;
-
-namespace Messenger.Application.Users.Commands.LoginUser;
-using MediatR;
+﻿using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
+using Messenger.Application.Interfaces;
+
+namespace Messenger.Application.Users.Commands.LoginUser;
+
 
 public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, AuthResult>
 {
@@ -35,7 +36,7 @@ public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, AuthRes
         var token = _jwtProvider.GenerateToken(user);
         return new AuthResult
         {
-            UserId = user.UserID,
+            UserId = user.Id,
             Token = token,
             Message = "Успешный вход."
         };

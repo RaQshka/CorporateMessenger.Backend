@@ -12,7 +12,7 @@ public interface IMessengerDbContext
     DbSet<Document> Documents { get; set; }
     DbSet<AuditLog> AuditLogs { get; set; }
     DbSet<Role> Roles { get; set; }
-    DbSet<UserRole> UserRoles { get; set; }
+    //DbSet<UserRole> UserRoles { get; set; }
     DbSet<DocumentAccessRule> DocumentAccessRules { get; set; }
     DbSet<DocumentAccessRuleRole> DocumentAccessRuleRoles { get; set; }
     DbSet<ChatAccessRule> ChatAccessRules { get; set; }
