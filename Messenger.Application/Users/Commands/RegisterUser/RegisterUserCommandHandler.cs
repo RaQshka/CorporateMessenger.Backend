@@ -1,44 +1,64 @@
-﻿using MediatR;
+﻿using System.ComponentModel.DataAnnotations;
+using MediatR;
 using Messenger.Application.Interfaces;
+using Messenger.Domain;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 
 namespace Messenger.Application.Users.Commands.RegisterUser;
 
-public class RegisterUserCommandHandler:IRequestHandler<RegisterUserCommand, RegistrationResult> 
+public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, RegistrationResult>
 {
-    private readonly IUserService _userService;
+    private readonly UserManager<User> _userManager;
     private readonly IEmailSender _emailSender;
-    private readonly IEmailConfirmationService _emailConfirmationService; // Может быть отдельный сервис для генерации токенов
+    private readonly IConfiguration _configuration;
 
-    public RegisterUserCommandHandler(IUserService userService, IEmailSender emailSender, IEmailConfirmationService emailConfirmationService)
+    public RegisterUserCommandHandler(UserManager<User> userManager, IEmailSender emailSender, IConfiguration configuration)
     {
-        _userService = userService;
+        _userManager = userManager;
         _emailSender = emailSender;
-        _emailConfirmationService = emailConfirmationService;
+        _configuration = configuration;
     }
+
     public async Task<RegistrationResult> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
-        var userId = await _userService.RegisterAsync(
-            request.Username, 
-            request.Email, 
-            request.Password, 
-            request.CorporateKey, 
-            request.FirstName, 
-            request.LastName);   
-        // Генерация токена для подтверждения email
-        var token = await _emailConfirmationService.GenerateEmailConfirmationTokenAsync(userId);
-        
-  
-        // Отправка email с подтверждением
-        var confirmationLink = $"https://yourdomain.com/api/auth/confirmemail?userId={userId}&token={token}";
+        if (await _userManager.FindByNameAsync(request.Username) != null)
+            throw new InvalidOperationException("Пользователь с таким логином уже существует!");
+
+        if (await _userManager.FindByEmailAsync(request.Email) != null)
+            throw new InvalidOperationException("Пользователь с такой почтой уже зарегистрирован!");
+
+        var user = new User
+        {
+            Id = Guid.NewGuid(),
+            UserName = request.Username,
+            Email = request.Email,
+            CorporateKey = request.CorporateKey,
+            FirstName = request.FirstName,
+            LastName = request.LastName,
+            CreatedAt = DateTime.UtcNow,
+            RegistrationStatus = "PendingApproval",
+            EmailConfirmed = false
+        };
+
+        var result = await _userManager.CreateAsync(user, request.Password);
+        if (!result.Succeeded)
+            throw new ValidationException(string.Join(',', result.Errors.Select(e => e.Description)));
+
+        // Генерация токена подтверждения email
+        var confirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+        // Формируем ссылку для письма и отправляем email
+        var frontendUrl = _configuration["FrontendUrl"];
+        var confirmationLink = $"{frontendUrl}/api/auth/confirmemail?userId={user.Id}&token={Uri.EscapeDataString(confirmationToken)}";
+
         var emailMessage = $"Для подтверждения регистрации перейдите по ссылке: {confirmationLink}";
         await _emailSender.SendEmailAsync(request.Email, "Подтверждение Email", emailMessage);
-        
-        // Возврат результата – регистрация прошла успешно, но заявка ожидает административной проверки
+
         return new RegistrationResult
         {
-            UserId = userId,
-            EmailConfirmationToken = token,
-            Message = "Заявка на регистрацию успешно подана. Подтвердите email, перейдя по ссылке в письме."
+            UserId = user.Id,
+            EmailConfirmationToken = confirmationToken,
         };
     }
 }
