@@ -12,21 +12,31 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, R
     private readonly UserManager<User> _userManager;
     private readonly IEmailSender _emailSender;
     private readonly IConfiguration _configuration;
+    private readonly RoleManager<IdentityRole> _roleManager;
 
-    public RegisterUserCommandHandler(UserManager<User> userManager, IEmailSender emailSender, IConfiguration configuration)
+    public RegisterUserCommandHandler(UserManager<User> userManager, IEmailSender emailSender, IConfiguration configuration, RoleManager<IdentityRole> roleManager)
     {
         _userManager = userManager;
         _emailSender = emailSender;
         _configuration = configuration;
+        _roleManager = roleManager;
     }
 
     public async Task<RegistrationResult> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
         if (await _userManager.FindByNameAsync(request.Username) != null)
-            throw new InvalidOperationException("Пользователь с таким логином уже существует!");
+            return new RegistrationResult
+            {
+                Message = "Пользователь с таким логином уже существует!"
+            };
+            //throw new InvalidOperationException("Пользователь с таким логином уже существует!");
 
         if (await _userManager.FindByEmailAsync(request.Email) != null)
-            throw new InvalidOperationException("Пользователь с такой почтой уже зарегистрирован!");
+            return new RegistrationResult
+            {
+                Message = "Пользователь с такой почтой уже зарегистрирован!"
+            };
+            //throw new InvalidOperationException("Пользователь с такой почтой уже зарегистрирован!");
 
         var user = new User
         {
@@ -42,8 +52,14 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, R
         };
 
         var result = await _userManager.CreateAsync(user, request.Password);
-        if (!result.Succeeded)
-            throw new ValidationException(string.Join(',', result.Errors.Select(e => e.Description)));
+        if (!result.Succeeded)            
+            return new RegistrationResult
+            {
+                Message = "Возникли ошибки: " + string.Join(',', result.Errors.Select(e => e.Description))
+            };
+            
+        
+        await _userManager.AddToRoleAsync(user, "Employee");
 
         // Генерация токена подтверждения email
         var confirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -59,6 +75,7 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, R
         {
             UserId = user.Id,
             EmailConfirmationToken = confirmationToken,
+            Message = "Регистрация прошла успешно!"
         };
     }
 }

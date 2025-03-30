@@ -12,7 +12,7 @@ using Notes.WebApi;
 
 public class Program
 {
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         var host = CreateHostBuilder(args).Build();
 
@@ -20,8 +20,8 @@ public class Program
         {
             using (var scope = host.Services.CreateScope())
             {
-                var context = scope.ServiceProvider.GetRequiredService<MessengerDbContext>();
-                DbInitializer.Initialize(context);
+                //var context = scope.ServiceProvider.GetRequiredService<MessengerDbContext>();
+                await DbInitializer.InitializeAsync(scope.ServiceProvider);
             }
 
         }

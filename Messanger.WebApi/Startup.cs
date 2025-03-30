@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Text;
 using Messenger.Application;
 using Messenger.Application.Common.Mappings;
 using Messenger.Application.Interfaces;
@@ -7,6 +8,7 @@ using Messenger.Persistence.Migrations;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Notes.WebApi
@@ -14,6 +16,7 @@ namespace Notes.WebApi
     public class Startup
     {
         public IConfiguration _configuration;
+
         public Startup(IConfiguration configuration)
         {
             _configuration = configuration;
@@ -26,7 +29,7 @@ namespace Notes.WebApi
                 config.AddProfile(new AssemblyMappingProfile(Assembly.GetExecutingAssembly()));
                 config.AddProfile(new AssemblyMappingProfile(typeof(IMessengerDbContext).Assembly));
             });
-            //services.AddApplication();
+            services.AddApplication();
             services.AddPersistance(_configuration);
             services.AddControllers();
             services.AddTransient<MessengerDbContextFactory>();
@@ -39,7 +42,30 @@ namespace Notes.WebApi
                     policy.AllowAnyOrigin();
                 });
             });
+            var jwtSettings = _configuration.GetSection("JwtSettings");
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Secret"])),
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidIssuer = jwtSettings["Issuer"],
+                    ValidAudience = jwtSettings["Audience"],
+                    ClockSkew = TimeSpan.Zero // Без задержки истечения токена
+                };
+            });
 
+            services.AddAuthorization();
+            services.AddSwaggerGen();
             /*services.AddAuthentication(config =>
             {
                 config.DefaultAuthenticateScheme =
@@ -63,14 +89,16 @@ namespace Notes.WebApi
 
             /*services.AddApiVersioning();*/
         }
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env/*, 
+
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env /*,
             IApiVersionDescriptionProvider provider*/)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-            /*app.UseSwagger();
+            app.UseSwagger();
+            /*
             app.UseSwaggerUI(config =>
             {
                 foreach(var description in provider.ApiVersionDescriptions)
@@ -86,8 +114,10 @@ namespace Notes.WebApi
 
             app.UseHttpsRedirection();
             app.UseCors("AllowAll");
+            
             app.UseAuthentication();
             app.UseAuthorization();
+            
             app.UseEndpoints(e => e.MapControllers());
         }
     }
