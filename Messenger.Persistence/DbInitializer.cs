@@ -11,14 +11,14 @@ public class DbInitializer
         var roleManager = services.GetRequiredService<RoleManager<Role>>();
         var context = services.GetRequiredService<MessengerDbContext>();
         var configuration = services.GetRequiredService<IConfiguration>();
-        IConfigurationSection myArraySection = configuration.GetSection("DefaultRoles");
-        var roleNames = myArraySection.AsEnumerable();
+        var myArraySection = configuration.GetSection("DefaultRoles").GetChildren();
+        var roleNames = myArraySection.ToList();
         
         foreach (var roleName in roleNames)
         {
-            if (!await roleManager.RoleExistsAsync(roleName.Key))
+            if (!await roleManager.RoleExistsAsync(roleName.Value))
             {
-                await roleManager.CreateAsync(new Role { Name = roleName.Key });
+                await roleManager.CreateAsync(new Role { Name = roleName.Value });
             }
         }
         context.Database.EnsureCreated();

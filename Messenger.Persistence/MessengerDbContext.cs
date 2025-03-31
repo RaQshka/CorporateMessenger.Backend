@@ -10,7 +10,10 @@ namespace Messenger.Persistence;
 public class MessengerDbContext: IdentityDbContext<User, Role, Guid>, IMessengerDbContext
 {
     public MessengerDbContext(DbContextOptions<MessengerDbContext> options)
-        :base(options){}
+        : base(options)
+    {
+        Database.EnsureCreated();
+    }
     
     public DbSet<User> Users { get; set; }
     public DbSet<Chat> Chats { get; set; }

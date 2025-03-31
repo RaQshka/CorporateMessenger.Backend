@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
-using Messenger.Application.Users.Commands.RegisterUser;
 
-namespace Messenger.Application.Users.Commands.LoginUser;
+namespace Messenger.Application.Users.Commands.RegisterUser;
 
 public class RegisterUserCommandValidator : AbstractValidator<RegisterUserCommand>
 {

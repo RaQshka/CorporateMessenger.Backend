@@ -11,7 +11,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace Notes.WebApi
+namespace Messenger.WebApi
 {
     public class Startup
     {
@@ -29,9 +29,11 @@ namespace Notes.WebApi
                 config.AddProfile(new AssemblyMappingProfile(Assembly.GetExecutingAssembly()));
                 config.AddProfile(new AssemblyMappingProfile(typeof(IMessengerDbContext).Assembly));
             });
+
             services.AddApplication();
             services.AddPersistance(_configuration);
-            services.AddControllers();
+            services.AddControllers();            
+            services.AddHttpContextAccessor();
             services.AddTransient<MessengerDbContextFactory>();
             services.AddCors(options =>
             {
@@ -65,7 +67,10 @@ namespace Notes.WebApi
             });
 
             services.AddAuthorization();
+            services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
+            
+
             /*services.AddAuthentication(config =>
             {
                 config.DefaultAuthenticateScheme =
@@ -94,7 +99,12 @@ namespace Notes.WebApi
             IApiVersionDescriptionProvider provider*/)
         {
             if (env.IsDevelopment())
-            {
+            {  
+                app.UseSwaggerUI(options => // UseSwaggerUI is called only in Development.
+                {
+                     options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+                     options.RoutePrefix = string.Empty;
+                });
                 app.UseDeveloperExceptionPage();
             }
             app.UseSwagger();

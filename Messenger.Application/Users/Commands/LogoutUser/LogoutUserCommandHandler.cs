@@ -8,9 +8,9 @@ public class LogoutUserCommandHandler: IRequestHandler<LogoutUserCommand>
 {
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
-    private readonly HttpContext _httpContext;
+    private readonly IHttpContextAccessor _httpContext;
     
-    public LogoutUserCommandHandler(UserManager<User> userManager, SignInManager<User> signInManager, HttpContext httpContext)
+    public LogoutUserCommandHandler(UserManager<User> userManager, SignInManager<User> signInManager, IHttpContextAccessor httpContext)
     {
         _userManager = userManager;
         _signInManager = signInManager;       
@@ -21,6 +21,6 @@ public class LogoutUserCommandHandler: IRequestHandler<LogoutUserCommand>
     {
         await _signInManager.SignOutAsync();
         // Если используем куки, отправляем пустую куку
-        _httpContext.Response.Cookies.Delete("jwt");
+        _httpContext.HttpContext.Response.Cookies.Delete("jwt");
     }
 }

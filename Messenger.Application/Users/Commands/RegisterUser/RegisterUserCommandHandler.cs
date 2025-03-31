@@ -12,14 +12,12 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, R
     private readonly UserManager<User> _userManager;
     private readonly IEmailSender _emailSender;
     private readonly IConfiguration _configuration;
-    private readonly RoleManager<IdentityRole> _roleManager;
 
-    public RegisterUserCommandHandler(UserManager<User> userManager, IEmailSender emailSender, IConfiguration configuration, RoleManager<IdentityRole> roleManager)
+    public RegisterUserCommandHandler(UserManager<User> userManager, IEmailSender emailSender, IConfiguration configuration)
     {
         _userManager = userManager;
         _emailSender = emailSender;
         _configuration = configuration;
-        _roleManager = roleManager;
     }
 
     public async Task<RegistrationResult> Handle(RegisterUserCommand request, CancellationToken cancellationToken)

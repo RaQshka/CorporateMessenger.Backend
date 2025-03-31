@@ -8,32 +8,35 @@ app.Run();
 */
 
 using Messenger.Persistence;
-using Notes.WebApi;
 
-public class Program
+namespace Messenger.WebApi
 {
-    public static async Task Main(string[] args)
+    
+    public class Program
     {
-        var host = CreateHostBuilder(args).Build();
-
-        try
+        public static async Task Main(string[] args)
         {
-            using (var scope = host.Services.CreateScope())
+            var host = CreateHostBuilder(args).Build();
+
+            try
             {
-                //var context = scope.ServiceProvider.GetRequiredService<MessengerDbContext>();
-                await DbInitializer.InitializeAsync(scope.ServiceProvider);
+                using (var scope = host.Services.CreateScope())
+                {
+                    //var context = scope.ServiceProvider.GetRequiredService<MessengerDbContext>();
+                    await DbInitializer.InitializeAsync(scope.ServiceProvider);
+                }
+
             }
+            catch (Exception ex)
+            {
 
+            }
+            host.Run();
         }
-        catch (Exception ex)
-        {
-
-        }
-        host.Run();
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args).ConfigureWebHostDefaults(webBuilder =>
+            {
+                webBuilder.UseStartup<Startup>();
+            });
     }
-    public static IHostBuilder CreateHostBuilder(string[] args) =>
-        Host.CreateDefaultBuilder(args).ConfigureWebHostDefaults(webBuilder =>
-        {
-            webBuilder.UseStartup<Startup>();
-        });
 }
