@@ -9,7 +9,6 @@ using Messenger.Application.Users.Commands.RefreshToken;
 using Messenger.Application.Users.Commands.RegisterUser;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Notes.WebApi.Models.Auth;
 
 namespace Messenger.WebApi.Controllers;
 
