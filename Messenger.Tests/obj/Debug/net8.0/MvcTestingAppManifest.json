@@ -1,0 +1,6 @@
+﻿{
+  "Messenger.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\Users\\User\\source\\repos\\CorporateMessenger\\CorporateMessenger.Backend\\Messenger.Application",
+  "Messenger.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\Users\\User\\source\\repos\\CorporateMessenger\\CorporateMessenger.Backend\\Messenger.Domain",
+  "Messenger.Persistence, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\Users\\User\\source\\repos\\CorporateMessenger\\CorporateMessenger.Backend\\Messenger.Persistence",
+  "Messenger.WebApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\Users\\User\\source\\repos\\CorporateMessenger\\CorporateMessenger.Backend\\Messanger.WebApi"
+}
