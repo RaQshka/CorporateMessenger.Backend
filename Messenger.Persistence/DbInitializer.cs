@@ -1,9 +1,26 @@
-﻿namespace Messenger.Persistence;
+﻿using Messenger.Domain;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+namespace Messenger.Persistence;
 
 public class DbInitializer
 {
-    public static void Initialize(MessengerDbContext context) {
-        context.Database.EnsureCreated(); 
+    public static async Task InitializeAsync(IServiceProvider services)
+    {
+        var roleManager = services.GetRequiredService<RoleManager<Role>>();
+        var context = services.GetRequiredService<MessengerDbContext>();
+        var configuration = services.GetRequiredService<IConfiguration>();
+        var myArraySection = configuration.GetSection("DefaultRoles").GetChildren();
+        var roleNames = myArraySection.ToList();
+        
+        foreach (var roleName in roleNames)
+        {
+            if (!await roleManager.RoleExistsAsync(roleName.Value))
+            {
+                await roleManager.CreateAsync(new Role { Name = roleName.Value });
+            }
+        }
+        context.Database.EnsureCreated();
     }
 }
-

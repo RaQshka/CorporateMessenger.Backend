@@ -4,6 +4,6 @@ namespace Messenger.Application.Interfaces;
 
 public interface IJwtProvider
 { 
-    string GenerateToken(User user);
+    Task<string> GenerateToken(User user);
     
 }

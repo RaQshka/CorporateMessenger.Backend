@@ -1,5 +1,5 @@
 ﻿namespace Messenger.Domain;
-
+/*
 public class UserRole
 {
     public Guid UserID { get; set; }
@@ -7,4 +7,4 @@ public class UserRole
     
     public Guid RoleID { get; set; }
     public Role Role { get; set; }
-}
+}*/
