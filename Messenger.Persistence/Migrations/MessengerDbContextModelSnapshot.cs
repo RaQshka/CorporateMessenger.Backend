@@ -116,14 +116,9 @@ namespace Messenger.Persistence.Migrations
                     b.Property<Guid>("RoleID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("RoleId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("ChatAccessRuleID", "RoleID");
 
                     b.HasIndex("RoleID");
-
-                    b.HasIndex("RoleId");
 
                     b.ToTable("ChatAccessRuleRoles");
                 });
@@ -220,14 +215,9 @@ namespace Messenger.Persistence.Migrations
                     b.Property<Guid>("RoleID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("RoleId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("DocumentAccessRuleID", "RoleID");
 
                     b.HasIndex("RoleID");
-
-                    b.HasIndex("RoleId");
 
                     b.ToTable("DocumentAccessRuleRoles");
                 });
@@ -247,7 +237,9 @@ namespace Messenger.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
 
                     b.Property<Guid>("SenderID")
                         .HasColumnType("uniqueidentifier");
@@ -262,6 +254,29 @@ namespace Messenger.Persistence.Migrations
                     b.HasIndex("SenderID");
 
                     b.ToTable("Messages");
+                });
+
+            modelBuilder.Entity("Messenger.Domain.RefreshToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshTokens");
                 });
 
             modelBuilder.Entity("Messenger.Domain.Role", b =>
@@ -521,20 +536,16 @@ namespace Messenger.Persistence.Migrations
             modelBuilder.Entity("Messenger.Domain.ChatAccessRuleRole", b =>
                 {
                     b.HasOne("Messenger.Domain.ChatAccessRule", "ChatAccessRule")
-                        .WithMany()
+                        .WithMany("ChatAccessRuleRoles")
                         .HasForeignKey("ChatAccessRuleID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Messenger.Domain.Role", "Role")
-                        .WithMany()
+                        .WithMany("ChatAccessRuleRoles")
                         .HasForeignKey("RoleID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Messenger.Domain.Role", null)
-                        .WithMany("ChatAccessRuleRoles")
-                        .HasForeignKey("RoleId");
 
                     b.Navigation("ChatAccessRule");
 
@@ -546,7 +557,7 @@ namespace Messenger.Persistence.Migrations
                     b.HasOne("Messenger.Domain.Chat", "Chat")
                         .WithMany("ChatParticipants")
                         .HasForeignKey("ChatID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Messenger.Domain.User", "User")
@@ -565,7 +576,7 @@ namespace Messenger.Persistence.Migrations
                     b.HasOne("Messenger.Domain.Chat", "Chat")
                         .WithMany("Documents")
                         .HasForeignKey("ChatID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Messenger.Domain.User", "Uploader")
@@ -599,14 +610,10 @@ namespace Messenger.Persistence.Migrations
                         .IsRequired();
 
                     b.HasOne("Messenger.Domain.Role", "Role")
-                        .WithMany()
+                        .WithMany("DocumentAccessRuleRoles")
                         .HasForeignKey("RoleID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Messenger.Domain.Role", null)
-                        .WithMany("DocumentAccessRuleRoles")
-                        .HasForeignKey("RoleId");
 
                     b.Navigation("DocumentAccessRule");
 
@@ -624,12 +631,23 @@ namespace Messenger.Persistence.Migrations
                     b.HasOne("Messenger.Domain.User", "Sender")
                         .WithMany("Messages")
                         .HasForeignKey("SenderID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Chat");
 
                     b.Navigation("Sender");
+                });
+
+            modelBuilder.Entity("Messenger.Domain.RefreshToken", b =>
+                {
+                    b.HasOne("Messenger.Domain.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -690,6 +708,11 @@ namespace Messenger.Persistence.Migrations
                     b.Navigation("Documents");
 
                     b.Navigation("Messages");
+                });
+
+            modelBuilder.Entity("Messenger.Domain.ChatAccessRule", b =>
+                {
+                    b.Navigation("ChatAccessRuleRoles");
                 });
 
             modelBuilder.Entity("Messenger.Domain.Role", b =>

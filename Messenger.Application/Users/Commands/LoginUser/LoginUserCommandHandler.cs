@@ -17,12 +17,20 @@ public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, LoginRe
     private readonly SignInManager<User> _signInManager;
     private readonly UserManager<User> _userManager;
     private readonly IJwtProvider _jwtProvider;
-
-    public LoginUserCommandHandler(SignInManager<User> signInManager, UserManager<User> userManager, IJwtProvider jwtProvider)
+    private readonly IRefreshTokenService _refreshTokenService;
+    private readonly IHttpContextAccessor _httpContextAccessor;
+    public LoginUserCommandHandler(
+        SignInManager<User> signInManager, 
+        UserManager<User> userManager, 
+        IJwtProvider jwtProvider,
+        IRefreshTokenService refreshTokenService,
+        IHttpContextAccessor httpContextAccessor)
     {
         _signInManager = signInManager;
         _userManager = userManager;
         _jwtProvider = jwtProvider;
+        _refreshTokenService = refreshTokenService;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public async Task<LoginResult> Handle(LoginUserCommand request, CancellationToken cancellationToken)
@@ -41,13 +49,31 @@ public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, LoginRe
         if (user.RegistrationStatus != "Approved")
             return new LoginResult { Message = "Регистрация не одобрена администратором." };
 
-        var token = await _jwtProvider.GenerateToken(user);
+        var accessToken = await _jwtProvider.GenerateToken(user);
+        var refreshToken = await _refreshTokenService.GenerateRefreshToken(user.Id);
+
+        var response = _httpContextAccessor.HttpContext.Response;
+        // Записываем токен в HttpOnly Cookie
+        response.Cookies.Append("AuthToken", accessToken, new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true, // Используется только при HTTPS
+            SameSite = SameSiteMode.Strict,
+        });
+        response.Cookies.Append("refreshToken", refreshToken, new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+            SameSite = SameSiteMode.Strict,
+            Expires = DateTime.UtcNow.AddDays(1)
+        });
 
         return new LoginResult
         {
             UserId = user.Id,
-            Token = token,
+            Token = accessToken,
             Message = "Успешный вход."
         };
     }
+
 }

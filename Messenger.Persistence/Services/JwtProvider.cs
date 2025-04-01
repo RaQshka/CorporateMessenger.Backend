@@ -49,7 +49,7 @@ public class JwtProvider: IJwtProvider
             claims: claims,
             expires: DateTime.UtcNow.AddMinutes(lifetime),
             signingCredentials: credentials
-        );
+            );
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }

@@ -13,7 +13,6 @@ public class User : IdentityUser<Guid>
 
     public string RegistrationStatus { get; set; } =
         "PendingConfirmation"; // Статусы: PendingConfirmation, PendingApproval, Approved, Rejected
-
     public ICollection<ChatParticipant> ChatParticipants { get; set; } = new List<ChatParticipant>();
     public ICollection<Message> Messages { get; set; } = new List<Message>();
     public ICollection<Document> Documents { get; set; } = new List<Document>();

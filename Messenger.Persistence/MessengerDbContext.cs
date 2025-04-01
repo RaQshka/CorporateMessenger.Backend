@@ -27,7 +27,7 @@ public class MessengerDbContext: IdentityDbContext<User, Role, Guid>, IMessenger
     public DbSet<DocumentAccessRuleRole> DocumentAccessRuleRoles { get; set; }
     public DbSet<ChatAccessRule> ChatAccessRules { get; set; }
     public DbSet<ChatAccessRuleRole> ChatAccessRuleRoles { get; set; }
-
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {        
         base.OnModelCreating(modelBuilder);

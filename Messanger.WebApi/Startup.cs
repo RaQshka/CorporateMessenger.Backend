@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Messenger.WebApi
@@ -68,7 +69,6 @@ namespace Messenger.WebApi
 
             services.AddAuthorization();
             services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen();
             
 
             /*services.AddAuthentication(config =>
@@ -93,6 +93,34 @@ namespace Messenger.WebApi
             });*/
 
             /*services.AddApiVersioning();*/
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { 
+                    Title = "MyApi", 
+                    Version = "v1" 
+                });
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme {
+                    In = ParameterLocation.Header, 
+                    Description = "Please insert JWT with Bearer into field",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey 
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement {
+                    { 
+                        new OpenApiSecurityScheme 
+                        { 
+                            Reference = new OpenApiReference 
+                            { 
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer" 
+                            } 
+                        },
+                        new string[] { } 
+                    } 
+                });
+            });
+
+            
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env /*,

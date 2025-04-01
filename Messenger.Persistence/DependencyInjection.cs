@@ -1,5 +1,6 @@
 ﻿using Messenger.Application.Interfaces;
 using Messenger.Domain;
+using Messenger.Persistence.Migrations;
 using Messenger.Persistence.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -37,9 +38,11 @@ public static class DependencyInjection
         services.AddScoped<UserManager<User>>();
         services.AddScoped<RoleManager<Role>>();
         services.AddScoped<SignInManager<User>>();
+        services.AddTransient<MessengerDbContextFactory>();
 
         // JWT-сервис
         services.AddScoped<IJwtProvider, JwtProvider>();
+        services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 
         // Email-сервис
         services.AddTransient<IEmailSender, EmailSender>();
