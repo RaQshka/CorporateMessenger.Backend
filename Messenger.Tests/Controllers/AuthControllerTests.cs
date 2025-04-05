@@ -92,7 +92,11 @@ namespace Messenger.Tests.Controllers
             _mediatorMock.Setup(m => m.Send(
                     It.IsAny<LogoutUserCommand>(), 
                     It.IsAny<CancellationToken>()
-                    )).Returns(Task.CompletedTask);
+                    )).ReturnsAsync(new LogoutUserResult()
+                    {
+                        Message = "Вы успешно вышли из системы", 
+                        Success = true
+                    });
 
             _controller.ControllerContext = new ControllerContext
             {

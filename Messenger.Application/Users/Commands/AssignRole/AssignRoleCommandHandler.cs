@@ -20,7 +20,10 @@ public class IRequestRoleCommandHandler:IRequestHandler<AssignRoleCommand,string
 
         if (await _userManager.IsInRoleAsync(user, request.Role))
             return "Пользователь уже имеет эту роль.";
-
+        //Удаляем предыдущие роли
+        var userRoles = await _userManager.GetRolesAsync(user);
+        await _userManager.RemoveFromRolesAsync(user, userRoles);
+        //Добавляем новую роль
         var result = await _userManager.AddToRoleAsync(user, request.Role);
         return result.Succeeded ? "Роль добавлена." : "Ошибка при добавлении роли.";
     }

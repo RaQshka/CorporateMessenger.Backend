@@ -49,6 +49,22 @@ public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, LoginRe
         if (user.RegistrationStatus != "Approved")
             return new LoginResult { Message = "Регистрация не одобрена администратором." };
 
+        var accessToken = await AddJwtCookies(user);
+        
+        user.LastLogin = DateTime.Now;
+        await _userManager.UpdateAsync(user);
+        
+        return new LoginResult
+        {
+            UserId = user.Id,
+            Token = accessToken,
+            Message = "Успешный вход."
+        };
+    }
+    
+    /// Функция генерации и добавления токенов в куки
+    private async Task<string> AddJwtCookies(User user)
+    {
         var accessToken = await _jwtProvider.GenerateToken(user);
         var refreshToken = await _refreshTokenService.GenerateRefreshToken(user.Id);
 
@@ -67,13 +83,15 @@ public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, LoginRe
             SameSite = SameSiteMode.Strict,
             Expires = DateTime.UtcNow.AddDays(1)
         });
-
-        return new LoginResult
+        response.Cookies.Append("UserId", user.Id.ToString(), new CookieOptions
         {
-            UserId = user.Id,
-            Token = accessToken,
-            Message = "Успешный вход."
-        };
+            HttpOnly = true,
+            Secure = true,
+            SameSite = SameSiteMode.Strict,
+            Expires = DateTime.UtcNow.AddDays(1)
+        });
+
+        return accessToken;
     }
 
 }

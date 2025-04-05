@@ -1,12 +1,13 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using MediatR;
+﻿using MediatR;
 using Messenger.Application.Users.Commands.AssignRole;
+using Messenger.Application.Users.Commands.ConfirmAccount;
 using Messenger.Application.Users.Commands.ConfirmEmail;
 using Messenger.Application.Users.Commands.LoginUser;
 using Messenger.Application.Users.Commands.LogoutUser;
 using Messenger.Application.Users.Commands.RefreshToken;
 using Messenger.Application.Users.Commands.RegisterUser;
+using Messenger.Application.Users.Queries.GetUserInfo;
+using Messenger.Application.Users.Queries.GetUsers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -99,16 +100,16 @@ public class AuthController:BaseController
         {
             return Unauthorized(new { message = "Токен отсутствует" });
         }
-        // Ищем пользовательский идентификатор в токене (claim) и проверяем, что он существует и является корректным GUID.
-        var userIdClaim = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
-
-        if (userIdClaim == null || !Guid.TryParse(userIdClaim.Value, out var userId))
+        if (!Request.Cookies.TryGetValue("UserId", out var userId))
         {
-            return Unauthorized(new { message = "Невалидный токен" });
+            return Unauthorized(new { message = "Отсутствует Id пользователя в куки, запрет на обновление токена." });
         }
 
-
-        var result = await _mediator.Send(new RefreshTokenCommand { RefreshToken = refreshToken, UserId = userId });
+        var result = await _mediator.Send(new RefreshTokenCommand
+        {
+            RefreshToken = refreshToken, 
+            UserId = Guid.Parse(userId)
+        });
 
         if (!result.Success)
         {
@@ -117,5 +118,60 @@ public class AuthController:BaseController
 
         return Ok(new { AccessToken = result.AccessToken });
     }
+    
+    /// <summary>
+    /// Подтвердить аккканут пользователя, для админа
+    /// </summary>
+    /// <param name="command"></param>
+    /// <returns></returns>
+    [Authorize(Roles = "Admin")]
+    [HttpPost("confirm-account")]
+    public async Task<IActionResult> ConfirmAccount(ConfirmAccountCommand command)
+    {
+        var result = await _mediator.Send(command);
+        if (!result.Success)
+            return Unauthorized(new { message = result.Message });
+        
+        return Ok(new { message = result.Message });
+    }
 
+    /// <summary>
+    /// Получить информацию о пользователе по Id
+    /// </summary>
+    /// <param name="command">GetUserInfoQuery</param>
+    /// <returns>UserDetailsDto</returns>
+    [Authorize(Roles = "Admin")]
+    [HttpGet("user-info")]
+    public async Task<IActionResult> GetUserInfo([FromQuery]GetUserInfoQuery command)
+    {
+        var result = await _mediator.Send(command);
+        if (result == null)
+        {
+            return NoContent();
+        }
+        return Ok(result);
+    }
+
+    [Authorize]
+    [HttpGet("profile")]
+    public async Task<IActionResult> GetProfile()
+    {
+        var userId = UserId;
+        if (userId == Guid.Empty)
+        {
+            return BadRequest();
+        }
+
+        var result = await _mediator.Send(new GetUserInfoQuery{UserId = userId});
+        return Ok(result);
+    }
+    [Authorize(Roles = "Admin")]
+    [HttpGet("get-users")]
+    public async Task<IActionResult> GetUsers()
+    {
+        var result = await _mediator.Send(new GetUsersQuery());
+        
+        return Ok(result);
+    }
+    
 }

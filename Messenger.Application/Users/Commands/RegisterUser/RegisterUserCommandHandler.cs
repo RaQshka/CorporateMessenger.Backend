@@ -68,7 +68,8 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, R
 
         var emailMessage = $"Для подтверждения регистрации перейдите по ссылке: {confirmationLink}";
         await _emailSender.SendEmailAsync(request.Email, "Подтверждение Email", emailMessage);
-
+        
+        
         return new RegistrationResult
         {
             UserId = user.Id,

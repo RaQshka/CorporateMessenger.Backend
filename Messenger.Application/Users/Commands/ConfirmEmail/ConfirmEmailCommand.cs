@@ -1,5 +1,5 @@
-﻿
-using MediatR;
+﻿using MediatR;
+using Messenger.Application.Users.Commands.LoginUser;
 
 namespace Messenger.Application.Users.Commands.ConfirmEmail;
 
