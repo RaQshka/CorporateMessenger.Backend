@@ -6,6 +6,7 @@ using Messenger.Application.Users.Commands.LoginUser;
 using Messenger.Application.Users.Commands.LogoutUser;
 using Messenger.Application.Users.Commands.RefreshToken;
 using Messenger.Application.Users.Commands.RegisterUser;
+using Messenger.Application.Users.Queries.GetUnconfirmedUsers;
 using Messenger.Application.Users.Queries.GetUserInfo;
 using Messenger.Application.Users.Queries.GetUsers;
 using Microsoft.AspNetCore.Authorization;
@@ -165,12 +166,21 @@ public class AuthController:BaseController
         var result = await _mediator.Send(new GetUserInfoQuery{UserId = userId});
         return Ok(result);
     }
+    
     [Authorize(Roles = "Admin")]
     [HttpGet("get-users")]
     public async Task<IActionResult> GetUsers()
     {
         var result = await _mediator.Send(new GetUsersQuery());
         
+        return Ok(result);
+    }
+
+    [Authorize(Roles = "Admin")]
+    [HttpGet("get-unconfirmed-users")]
+    public async Task<IActionResult> GetUnconfirmedUsers()
+    {
+        var result = await _mediator.Send(new GetUnconfirmedUsersQuery());
         return Ok(result);
     }
     

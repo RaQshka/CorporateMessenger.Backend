@@ -19,7 +19,7 @@ public class ConfirmAccountCommandHandler : IRequestHandler<ConfirmAccountComman
             return new ConfirmAccountResult()
             {
                 Success = false, 
-                Message = "User does not exist"
+                Message = "Пользователя не существует"
             };
         }
         if (user.EmailConfirmed != true)
@@ -27,7 +27,7 @@ public class ConfirmAccountCommandHandler : IRequestHandler<ConfirmAccountComman
             return new ConfirmAccountResult()
             {
                 Success = false,
-                Message = "User does not have email confirmed"
+                Message = "Email не подтверждён"
             };
         }
 
@@ -36,7 +36,7 @@ public class ConfirmAccountCommandHandler : IRequestHandler<ConfirmAccountComman
             return new ConfirmAccountResult()
             {
                 Success = true,
-                Message = "User is already approved"
+                Message = "Пользователь уже был подтвержден ранее"
             };
         }
         user.RegistrationStatus = "Approved";
@@ -45,7 +45,7 @@ public class ConfirmAccountCommandHandler : IRequestHandler<ConfirmAccountComman
         return new ConfirmAccountResult()
         {
             Success = true,
-            Message = "User approved"
+            Message = "Пользователь подтвержден"
         };
     }
 }

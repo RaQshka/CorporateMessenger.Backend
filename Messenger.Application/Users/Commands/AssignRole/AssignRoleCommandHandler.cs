@@ -1,16 +1,18 @@
 ﻿using MediatR;
 using Messenger.Domain;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 
 namespace Messenger.Application.Users.Commands.AssignRole;
 
-public class IRequestRoleCommandHandler:IRequestHandler<AssignRoleCommand,string>
+public class AssignRoleCommandHandler:IRequestHandler<AssignRoleCommand,string>
 {
     private readonly UserManager<User> _userManager;
-
-    public IRequestRoleCommandHandler(UserManager<User> userManager)
+    private readonly IConfiguration _configuration;
+    public AssignRoleCommandHandler(UserManager<User> userManager, IConfiguration configuration)
     {
         _userManager = userManager;
+        _configuration = configuration;
     }
     public async Task<string> Handle(AssignRoleCommand request, CancellationToken cancellationToken)
     {
@@ -20,6 +22,14 @@ public class IRequestRoleCommandHandler:IRequestHandler<AssignRoleCommand,string
 
         if (await _userManager.IsInRoleAsync(user, request.Role))
             return "Пользователь уже имеет эту роль.";
+
+        if (_configuration.GetSection("DefaultRoles")
+            .GetChildren()
+            .All(x => x.Value != request.Role))
+        {
+            return "Несуществующая роль. Измените соответствующие роли в файле конфигурации.";
+        }        
+        
         //Удаляем предыдущие роли
         var userRoles = await _userManager.GetRolesAsync(user);
         await _userManager.RemoveFromRolesAsync(user, userRoles);

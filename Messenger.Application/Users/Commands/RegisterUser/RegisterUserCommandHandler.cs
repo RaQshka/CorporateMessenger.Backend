@@ -27,14 +27,12 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, R
             {
                 Message = "Пользователь с таким логином уже существует!"
             };
-            //throw new InvalidOperationException("Пользователь с таким логином уже существует!");
 
         if (await _userManager.FindByEmailAsync(request.Email) != null)
             return new RegistrationResult
             {
                 Message = "Пользователь с такой почтой уже зарегистрирован!"
             };
-            //throw new InvalidOperationException("Пользователь с такой почтой уже зарегистрирован!");
 
         var user = new User
         {
@@ -64,7 +62,7 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, R
 
         // Формируем ссылку для письма и отправляем email
         var frontendUrl = _configuration["FrontendUrl"];
-        var confirmationLink = $"{frontendUrl}/api/auth/confirmemail?userId={user.Id}&token={Uri.EscapeDataString(confirmationToken)}";
+        var confirmationLink = $"{frontendUrl}/api/auth/confirm-email?userId={user.Id}&token={Uri.EscapeDataString(confirmationToken)}";
 
         var emailMessage = $"Для подтверждения регистрации перейдите по ссылке: {confirmationLink}";
         await _emailSender.SendEmailAsync(request.Email, "Подтверждение Email", emailMessage);
