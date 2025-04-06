@@ -5,6 +5,7 @@ using Messenger.Application.Common.Mappings;
 using Messenger.Application.Interfaces;
 using Messenger.Persistence;
 using Messenger.Persistence.Migrations;
+using Messenger.WebApi.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Options;
@@ -70,6 +71,7 @@ namespace Messenger.WebApi
             services.AddAuthorization();
             services.AddEndpointsApiExplorer();
             
+            
 
             /*services.AddAuthentication(config =>
             {
@@ -119,8 +121,6 @@ namespace Messenger.WebApi
                     } 
                 });
             });
-
-            
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env /*,
@@ -155,7 +155,7 @@ namespace Messenger.WebApi
             
             app.UseAuthentication();
             app.UseAuthorization();
-            
+            app.UseMiddleware<AuditMiddleware>();
             app.UseEndpoints(e => e.MapControllers());
         }
     }

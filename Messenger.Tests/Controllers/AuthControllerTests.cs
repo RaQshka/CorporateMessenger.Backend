@@ -3,6 +3,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using Messenger.Application.Interfaces;
 using Messenger.Application.Users.Commands.AssignRole;
 using Messenger.Application.Users.Commands.ConfirmEmail;
 using Messenger.Application.Users.Commands.LoginUser;
@@ -20,12 +21,13 @@ namespace Messenger.Tests.Controllers
     public class AuthControllerTests
     {
         private readonly Mock<IMediator> _mediatorMock;
+        private readonly Mock<IAuditLogger> _auditMock;
         private readonly AuthController _controller;
 
         public AuthControllerTests()
         {
             _mediatorMock = new Mock<IMediator>();
-            _controller = new AuthController(_mediatorMock.Object);
+            _controller = new AuthController(_mediatorMock.Object, _auditMock.Object);
         }
 
         [Fact]

@@ -8,8 +8,8 @@ public class AuditLogConfiguration : IEntityTypeConfiguration<AuditLog>
 {
     public void Configure(EntityTypeBuilder<AuditLog> builder)
     {
-        builder.HasKey(a => a.LogID);
+        builder.HasKey(a => a.LogId);
         builder.Property(a => a.ActionType).IsRequired().HasMaxLength(100);
-        builder.HasOne(a => a.User).WithMany().HasForeignKey(a => a.UserID);
+        builder.HasOne(a => a.User).WithMany().HasForeignKey(a => a.UserId);
     }
 }

@@ -1,4 +1,6 @@
 ﻿using MediatR;
+using Messenger.Application.Attributes;
+using Messenger.Application.Interfaces;
 using Messenger.Application.Users.Commands.AssignRole;
 using Messenger.Application.Users.Commands.ConfirmAccount;
 using Messenger.Application.Users.Commands.ConfirmEmail;
@@ -14,25 +16,34 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Messenger.WebApi.Controllers;
 
-
 [ApiController]
+[AuditController]
 [Route("api/auth")]
 public class AuthController:BaseController
 {
     private readonly IMediator _mediator;
-    
-    public AuthController(IMediator mediator)
+    private readonly IAuditLogger _auditLogger;
+    public AuthController(IMediator mediator, IAuditLogger auditLogger)
     {
         _mediator = mediator;
+        _auditLogger = auditLogger;
     }
 
     /// <summary>
     /// Регистрация нового пользователя
     /// </summary>
+    [NoAudit]
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterUserCommand command)
     {
         var result = await _mediator.Send(command);
+        
+        await _auditLogger.LogAsync(userId: result.UserId, 
+                actionType: "Registration", 
+                targetEntity: "User",
+                targetId: result.UserId, 
+                result.Message);
+        
         return Ok(result);
     }
 
@@ -50,15 +61,14 @@ public class AuthController:BaseController
     /// <summary>
     /// Вход в систему
     /// </summary>
+    
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginUserCommand command)
     {
         var result = await _mediator.Send(command);
         if (string.IsNullOrEmpty(result.Token))
             return Unauthorized(result.Message);
-
-
-
+        
         return Ok(result);
     }
 
