@@ -1,4 +1,5 @@
-﻿using Messenger.Application.Attributes;
+﻿using System.Security.Claims;
+using Messenger.Application.Attributes;
 using Messenger.Application.Interfaces;
 using LogLevel = Messenger.Domain.Enums.LogLevel;
 
@@ -33,10 +34,10 @@ public class AuditMiddleware
             if (auditAttr != null || auditControllerAttr != null)
             {
                 // Пример: логирование начала запроса
-                var userId = context.User?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+                var userId = context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 var description = string.IsNullOrEmpty(auditAttr?.Description)
-                    ? $"Request to {context.Request.Path}"
-                    : auditAttr.Description;
+                    ? $"Запрос в {context.Request.Path}"
+                    : $"Запрос в {context.Request.Path}, сообщение: {auditAttr.Description}";
 
                 // Можно получить IP, User-Agent, и т.д.
                 var ipAddress = context.Connection.RemoteIpAddress?.ToString() ?? "Unknown";

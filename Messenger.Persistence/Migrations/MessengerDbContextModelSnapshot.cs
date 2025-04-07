@@ -70,7 +70,7 @@ namespace Messenger.Persistence.Migrations
 
             modelBuilder.Entity("Messenger.Domain.Chat", b =>
                 {
-                    b.Property<Guid>("ChatID")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -93,7 +93,7 @@ namespace Messenger.Persistence.Migrations
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("ChatID");
+                    b.HasKey("Id");
 
                     b.HasIndex("CreatedBy");
 
@@ -102,23 +102,27 @@ namespace Messenger.Persistence.Migrations
 
             modelBuilder.Entity("Messenger.Domain.ChatAccessRule", b =>
                 {
-                    b.Property<Guid>("ChatAccessRuleID")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ChatID")
+                    b.Property<Guid>("ChatId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<bool>("IsAdmin")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("JoinedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("RuleDescription")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("ChatAccessRuleID");
+                    b.HasKey("Id");
 
-                    b.HasIndex("ChatID");
+                    b.HasIndex("ChatId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("ChatAccessRules");
                 });
@@ -140,10 +144,10 @@ namespace Messenger.Persistence.Migrations
 
             modelBuilder.Entity("Messenger.Domain.ChatParticipant", b =>
                 {
-                    b.Property<Guid>("ChatID")
+                    b.Property<Guid>("ChatId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("UserID")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsAdmin")
@@ -152,9 +156,9 @@ namespace Messenger.Persistence.Migrations
                     b.Property<DateTime>("JoinedAt")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("ChatID", "UserID");
+                    b.HasKey("ChatId", "UserId");
 
-                    b.HasIndex("UserID");
+                    b.HasIndex("UserId");
 
                     b.ToTable("ChatParticipants");
                 });
@@ -239,11 +243,11 @@ namespace Messenger.Persistence.Migrations
 
             modelBuilder.Entity("Messenger.Domain.Message", b =>
                 {
-                    b.Property<Guid>("MessageID")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ChatID")
+                    b.Property<Guid>("ChatId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Content")
@@ -256,17 +260,17 @@ namespace Messenger.Persistence.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
 
-                    b.Property<Guid>("SenderID")
+                    b.Property<Guid>("SenderId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("SentAt")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("MessageID");
+                    b.HasKey("Id");
 
-                    b.HasIndex("ChatID");
+                    b.HasIndex("ChatId");
 
-                    b.HasIndex("SenderID");
+                    b.HasIndex("SenderId");
 
                     b.ToTable("Messages");
                 });
@@ -541,11 +545,19 @@ namespace Messenger.Persistence.Migrations
                 {
                     b.HasOne("Messenger.Domain.Chat", "Chat")
                         .WithMany()
-                        .HasForeignKey("ChatID")
+                        .HasForeignKey("ChatId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Messenger.Domain.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Chat");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Messenger.Domain.ChatAccessRuleRole", b =>
@@ -553,7 +565,7 @@ namespace Messenger.Persistence.Migrations
                     b.HasOne("Messenger.Domain.ChatAccessRule", "ChatAccessRule")
                         .WithMany("ChatAccessRuleRoles")
                         .HasForeignKey("ChatAccessRuleID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Messenger.Domain.Role", "Role")
@@ -571,13 +583,13 @@ namespace Messenger.Persistence.Migrations
                 {
                     b.HasOne("Messenger.Domain.Chat", "Chat")
                         .WithMany("ChatParticipants")
-                        .HasForeignKey("ChatID")
+                        .HasForeignKey("ChatId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Messenger.Domain.User", "User")
                         .WithMany("ChatParticipants")
-                        .HasForeignKey("UserID")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -639,13 +651,13 @@ namespace Messenger.Persistence.Migrations
                 {
                     b.HasOne("Messenger.Domain.Chat", "Chat")
                         .WithMany("Messages")
-                        .HasForeignKey("ChatID")
+                        .HasForeignKey("ChatId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Messenger.Domain.User", "Sender")
                         .WithMany("Messages")
-                        .HasForeignKey("SenderID")
+                        .HasForeignKey("SenderId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 

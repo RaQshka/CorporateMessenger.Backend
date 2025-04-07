@@ -53,6 +53,8 @@ public static class DependencyInjection
         // Репозитории
         services.AddScoped<IMessengerDbContext>(provider => provider.GetRequiredService<MessengerDbContext>());
         services.AddScoped<IMessageRepository, MessageRepository>();
+        services.AddScoped<IChatRepository, ChatRepository>();
+        services.AddTransient<IUserAccessService, UserAccessService>();
         return services;
     }
 

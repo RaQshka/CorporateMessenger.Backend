@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Messenger.Persistence")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+74a01e1b8d9718c61c0997c86de427e91247bc60")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cb8ddab71cb09f98700cd30a84926e4d199d3098")]
 [assembly: System.Reflection.AssemblyProductAttribute("Messenger.Persistence")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Messenger.Persistence")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

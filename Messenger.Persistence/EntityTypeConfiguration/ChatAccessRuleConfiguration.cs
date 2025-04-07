@@ -8,7 +8,12 @@ public class ChatAccessRuleConfiguration : IEntityTypeConfiguration<ChatAccessRu
 {
     public void Configure(EntityTypeBuilder<ChatAccessRule> builder)
     {
-        builder.HasKey(car => car.ChatAccessRuleID);
-        builder.Property(car => car.RuleDescription).IsRequired();
+        builder.HasKey(car => car.Id);
+        builder.Property(car => car.ChatId).IsRequired();
+        builder.HasOne(x => x.Chat)
+            .WithMany()
+            .HasForeignKey(x => x.ChatId)
+            .OnDelete(DeleteBehavior.Restrict);
+
     }
 }

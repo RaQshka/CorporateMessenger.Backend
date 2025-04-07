@@ -8,16 +8,16 @@ public class MessageConfiguration : IEntityTypeConfiguration<Message>
 {
     public void Configure(EntityTypeBuilder<Message> builder)
     {
-        builder.HasKey(m => m.MessageID);
+        builder.HasKey(m => m.Id);
 
         builder.HasOne(m => m.Chat)
             .WithMany(c => c.Messages)
-            .HasForeignKey(m => m.ChatID)
+            .HasForeignKey(m => m.ChatId)
             .OnDelete(DeleteBehavior.Cascade); // Запрещаем каскадное удаление
 
         builder.HasOne(m => m.Sender)
             .WithMany(u => u.Messages)
-            .HasForeignKey(m => m.SenderID)
+            .HasForeignKey(m => m.SenderId)
             .OnDelete(DeleteBehavior.Restrict); // Оставляем каскадное удаление для отправителя
 
         builder.Property(m => m.Content).IsRequired().HasMaxLength(5000);

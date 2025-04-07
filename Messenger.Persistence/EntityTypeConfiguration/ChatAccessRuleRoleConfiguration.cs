@@ -13,7 +13,7 @@ public class ChatAccessRuleRoleConfiguration : IEntityTypeConfiguration<ChatAcce
         builder.HasOne(carr => carr.ChatAccessRule)
             .WithMany(car => car.ChatAccessRuleRoles)
             .HasForeignKey(carr => carr.ChatAccessRuleID)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(carr => carr.Role)
             .WithMany(r => r.ChatAccessRuleRoles)

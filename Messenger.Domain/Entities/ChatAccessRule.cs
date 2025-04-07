@@ -2,11 +2,16 @@
 
 public class ChatAccessRule
 {
-    public Guid ChatAccessRuleID { get; set; }
-    public Guid ChatID { get; set; }
-    public Chat Chat { get; set; }
-    public string RuleDescription { get; set; } = string.Empty;
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public Guid Id { get; set; }
     
+    public Guid ChatId { get; set; }            // Вместо ChatID
+    public Chat Chat { get; set; }
+    
+    public Guid UserId { get; set; }
+    public User User { get; set; }
+    
+    public DateTime JoinedAt { get; set; } = DateTime.UtcNow;
+    public bool IsAdmin { get; set; }
+
     public ICollection<ChatAccessRuleRole> ChatAccessRuleRoles { get; set; } = new List<ChatAccessRuleRole>();
 }

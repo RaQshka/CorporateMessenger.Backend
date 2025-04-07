@@ -1,16 +1,47 @@
 ﻿using Messenger.Application.Interfaces;
+using Messenger.Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace Messenger.Persistence.Services;
 
-public class MessageRepository:IMessageRepository
+public class MessageRepository : IMessageRepository
 {
-    public Task SendMessageAsync(Guid chatId, string content)
+    private readonly MessengerDbContext _context;
+
+    public MessageRepository(MessengerDbContext context)
     {
-        throw new NotImplementedException();
+        _context = context;
     }
 
-    public Task GetGroupMessages(Guid chatId)
+    public async Task<Message> SendMessageAsync(Message message, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        await _context.Messages.AddAsync(message, cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
+        return message;
+    }
+
+    public async Task<List<Message>> GetMessagesByChatIdAsync(Guid chatId, CancellationToken cancellationToken)
+    {
+        // Сортировка по дате отправления (по возрастанию)
+        return await _context.Messages
+            .Where(m => m.ChatId == chatId)
+            .OrderBy(m => m.SentAt)
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task UpdateMessageAsync(Message message, CancellationToken cancellationToken)
+    {
+        _context.Messages.Update(message);
+        await _context.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task DeleteMessageAsync(Guid messageId, CancellationToken cancellationToken)
+    {
+        var message = await _context.Messages.FindAsync(new object[] { messageId }, cancellationToken);
+        if (message != null)
+        {
+            _context.Messages.Remove(message);
+            await _context.SaveChangesAsync(cancellationToken);
+        }
     }
 }
