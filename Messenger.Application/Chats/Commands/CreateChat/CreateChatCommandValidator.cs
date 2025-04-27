@@ -10,6 +10,5 @@ public class CreateChatCommandValidator : AbstractValidator<CreateChatCommand>
             .NotEmpty().WithMessage("Имя чата не может быть пустым.");
         RuleFor(x => x.ChatName).NotEmpty().WithMessage("Тип чата не может быть пустым");
         RuleFor(x => x.CreatedBy).NotEmpty().WithMessage("Чат нельзя создать без создателя");
-        RuleFor(x => x.AccessPolicy).NotEmpty().WithMessage("Тип чата не может быть пустым");
     }
 }

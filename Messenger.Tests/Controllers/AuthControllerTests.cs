@@ -119,7 +119,7 @@ namespace Messenger.Tests.Controllers
             // Arrange
             var command = new AssignRoleCommand { UserId = Guid.NewGuid(), Role = "Admin" };
             _mediatorMock.Setup(m => m.Send(command, It.IsAny<CancellationToken>()))
-                         .ReturnsAsync("Роль добавлена.");
+                         .ReturnsAsync(new AssignRoleResult(){Success = true, Message = "Роль добавлена."});
 
             // Act
             var result = await _controller.AssignRole(command);

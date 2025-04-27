@@ -26,9 +26,19 @@ public class CreateChatCommandHandler : IRequestHandler<CreateChatCommand, ChatD
             ChatType = request.ChatType,
             CreatedBy = request.CreatedBy,
             CreatedAt = DateTime.UtcNow,
-            AccessPolicy = request.AccessPolicy
+            ChatAccessRules = new List<ChatAccessRule>()
         };
 
+        chat.ChatParticipants = new List<ChatParticipant>()
+        {
+            new ChatParticipant()
+            {
+                ChatId = chat.Id,
+                UserId = request.CreatedBy,
+                IsAdmin = true
+            }
+        };
+        
         var createdChat = await _chatRepository.CreateChatAsync(chat, cancellationToken);
         return _mapper.Map<ChatDto>(createdChat);
     }

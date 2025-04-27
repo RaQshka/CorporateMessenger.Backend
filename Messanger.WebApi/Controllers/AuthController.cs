@@ -8,6 +8,7 @@ using Messenger.Application.Users.Commands.LoginUser;
 using Messenger.Application.Users.Commands.LogoutUser;
 using Messenger.Application.Users.Commands.RefreshToken;
 using Messenger.Application.Users.Commands.RegisterUser;
+using Messenger.Application.Users.Commands.RemoveRole;
 using Messenger.Application.Users.Queries.GetUnconfirmedUsers;
 using Messenger.Application.Users.Queries.GetUserInfo;
 using Messenger.Application.Users.Queries.GetUsers;
@@ -95,7 +96,25 @@ public class AuthController:BaseController
     public async Task<IActionResult> AssignRole([FromBody] AssignRoleCommand command)
     {
         var result = await _mediator.Send(command);
-        return Ok(new { message = result });
+        if (!result.Success)
+        {
+            return BadRequest(result.Message);
+        }
+        return Ok(new { message = result.Message });
+    }
+    /// <summary>
+    /// Удаление роли у пользователя (доступно только админам)
+    /// </summary>
+    [Authorize(Roles = "Admin")]
+    [HttpPost("remove-role")]
+    public async Task<IActionResult> RemoveRole(RemoveRoleCommand command)
+    {
+        var result = await _mediator.Send(command);
+        if (!result.Success)
+        {
+            return BadRequest(result.Message);
+        }
+        return Ok(new { message = result.Message });
     }
     
     /// <summary>

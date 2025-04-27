@@ -1,6 +1,8 @@
-﻿using Messenger.Application.Interfaces;
+﻿/*
+using Messenger.Application.Interfaces;
 using Messenger.Domain;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Messenger.Persistence.Services;
 
@@ -23,12 +25,13 @@ public class UserAccessService : IUserAccessService
                 return false;
             
             // Если политика пуста, можно допустить отправку всеми
-            if (string.IsNullOrWhiteSpace(chat.AccessPolicy))
+            if (chat.ChatAccessRules.IsNullOrEmpty())
                 return true;
 
             // Предположим, AccessPolicy — это строка с допустимыми ролями, разделёнными запятыми.
-            var allowedRoles = chat.AccessPolicy.Split(',', StringSplitOptions.RemoveEmptyEntries)
+            var allowedRoles = chat.ChatAccessRules.Select(x=>x.)/*AccessPolicy.Split(',', StringSplitOptions.RemoveEmptyEntries)
                                     .Select(r => r.Trim().ToLowerInvariant()).ToList();
+                                    #1#
 
             // Получаем роли пользователя
             var user = await _userManager.FindByIdAsync(userId.ToString());
@@ -64,3 +67,4 @@ public class UserAccessService : IUserAccessService
             return participant != null && participant.IsAdmin;
         }
     }
+    */

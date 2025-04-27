@@ -3,29 +3,31 @@ using Messenger.Domain;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 
-namespace Messenger.Application.Users.Commands.AssignRole;
+namespace Messenger.Application.Users.Commands.RemoveRole;
 
-public class AssignRoleCommandHandler:IRequestHandler<AssignRoleCommand,AssignRoleResult>
+public class RemoveRoleCommandHandler:IRequestHandler<RemoveRoleCommand,RemoveRoleResult>
 {
     private readonly UserManager<User> _userManager;
     private readonly IConfiguration _configuration;
-    public AssignRoleCommandHandler(UserManager<User> userManager, IConfiguration configuration)
+
+    public RemoveRoleCommandHandler( UserManager<User> userManager, IConfiguration configuration)
     {
         _userManager = userManager;
         _configuration = configuration;
     }
-    public async Task<AssignRoleResult> Handle(AssignRoleCommand request, CancellationToken cancellationToken)
+    
+    public async Task<RemoveRoleResult> Handle(RemoveRoleCommand request, CancellationToken cancellationToken)
     {
         var user = await _userManager.FindByIdAsync(request.UserId.ToString());
         if (user == null)
-            return new AssignRoleResult()
+            return new RemoveRoleResult()
             {
                 Success = false,
                 Message = "Пользователь не найден."
             };
 
         if (await _userManager.IsInRoleAsync(user, request.Role))
-            return new AssignRoleResult()
+            return new RemoveRoleResult()
             {
                 Success = false,
                 Message = "Пользователь уже имеет эту роль."
@@ -36,31 +38,20 @@ public class AssignRoleCommandHandler:IRequestHandler<AssignRoleCommand,AssignRo
             .GetChildren()
             .All(x => x.Value != request.Role))
         {
-            return new AssignRoleResult()
+            return new RemoveRoleResult()
             {
                 Success = false,
                 Message = "Несуществующая роль. Измените соответствующие роли в файле конфигурации."
             };
         }        
-
-        //Удаляем предыдущие роли
-        /*var userRoles = await _userManager.GetRolesAsync(user);
-        await _userManager.RemoveFromRolesAsync(user, userRoles);*/
-        //Добавляем новую роль
-        var result = await _userManager.AddToRoleAsync(user, request.Role);
         
-        if (!result.Succeeded)
-        {
-            return new AssignRoleResult()
-            {
-                Success = false,
-                Message = "Ошибка при добавлении роли."
-            };
-        }
-        return new AssignRoleResult()
+        await _userManager.RemoveFromRoleAsync(user, request.Role);
+        await _userManager.UpdateAsync(user);
+        
+        return new RemoveRoleResult()
         {
             Success = true,
-            Message = "Роль добавлена."
+            Message = "Роль успешно удалена у пользователя."
         };
     }
 }
