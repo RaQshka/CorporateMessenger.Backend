@@ -26,12 +26,11 @@ public class CreateChatCommandHandler : IRequestHandler<CreateChatCommand, ChatD
             ChatType = request.ChatType,
             CreatedBy = request.CreatedBy,
             CreatedAt = DateTime.UtcNow,
-            ChatAccessRules = new List<ChatAccessRule>()
         };
 
         chat.ChatParticipants = new List<ChatParticipant>()
         {
-            new ChatParticipant()
+            new ()
             {
                 ChatId = chat.Id,
                 UserId = request.CreatedBy,

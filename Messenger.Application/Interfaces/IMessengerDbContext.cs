@@ -16,6 +16,8 @@ public interface IMessengerDbContext
     DbSet<DocumentAccessRule> DocumentAccessRules { get; set; }
     DbSet<DocumentAccessRuleRole> DocumentAccessRuleRoles { get; set; }
     DbSet<ChatAccessRule> ChatAccessRules { get; set; }
+    /*
     DbSet<ChatAccessRuleRole> ChatAccessRuleRoles { get; set; }
+    */
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

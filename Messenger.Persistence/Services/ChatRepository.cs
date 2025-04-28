@@ -20,17 +20,21 @@ public class ChatRepository : IChatRepository
     }
 
     public async Task<Chat> GetChatByIdAsync(Guid chatId, CancellationToken cancellationToken)
-    {
+    {        throw new NotImplementedException();
+
+        
         // Подключаем участников, сообщения и документы для полноценного отображения чата
         return await _context.Chats
             .Include(c => c.ChatParticipants)
             .Include(c => c.Messages.Where(m=>m.SentAt > DateTime.UtcNow.AddDays(30)))
             .Include(c => c.Documents)
             .FirstOrDefaultAsync(c => c.Id == chatId, cancellationToken);
+    
     }
 
     public async Task<List<Chat>> GetUserChatsAsync(Guid userId, CancellationToken cancellationToken)
-    {
+    {        throw new NotImplementedException();
+
         // Возвращаем чаты, где пользователь является участником
         return await _context.Chats
             .Include(c => c.ChatParticipants)

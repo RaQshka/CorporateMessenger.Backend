@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Messenger.Persistence.EntityTypeConfiguration;
 
-public class ChatAccessRuleRoleConfiguration : IEntityTypeConfiguration<ChatAccessRuleRole>
+/*public class ChatAccessRuleRoleConfiguration : IEntityTypeConfiguration<ChatAccessRuleRole>
 {
     public void Configure(EntityTypeBuilder<ChatAccessRuleRole> builder)
     {
@@ -20,4 +20,4 @@ public class ChatAccessRuleRoleConfiguration : IEntityTypeConfiguration<ChatAcce
             .HasForeignKey(carr => carr.RoleID)
             .OnDelete(DeleteBehavior.Cascade); // Можно заменить на Restrict, если проблемы останутся
     }
-}
+}*/

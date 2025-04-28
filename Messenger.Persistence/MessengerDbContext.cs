@@ -26,7 +26,9 @@ public class MessengerDbContext: IdentityDbContext<User, Role, Guid>, IMessenger
     public DbSet<DocumentAccessRule> DocumentAccessRules { get; set; }
     public DbSet<DocumentAccessRuleRole> DocumentAccessRuleRoles { get; set; }
     public DbSet<ChatAccessRule> ChatAccessRules { get; set; }
+    /*
     public DbSet<ChatAccessRuleRole> ChatAccessRuleRoles { get; set; }
+    */
     public DbSet<RefreshToken> RefreshTokens { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {        
@@ -43,7 +45,9 @@ public class MessengerDbContext: IdentityDbContext<User, Role, Guid>, IMessenger
         modelBuilder.ApplyConfiguration(new DocumentAccessRuleConfiguration());
         modelBuilder.ApplyConfiguration(new DocumentAccessRuleRoleConfiguration());
         modelBuilder.ApplyConfiguration(new ChatAccessRuleConfiguration());
+        /*
         modelBuilder.ApplyConfiguration(new ChatAccessRuleRoleConfiguration());
+        */
         
     }
 }
