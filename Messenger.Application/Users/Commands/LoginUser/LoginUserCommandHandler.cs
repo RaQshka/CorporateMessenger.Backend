@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 
 using System.IdentityModel.Tokens.Jwt;
 using Messenger.Application.Interfaces;
+using Messenger.Domain.Entities;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Messenger.Application.Users.Commands.LoginUser;

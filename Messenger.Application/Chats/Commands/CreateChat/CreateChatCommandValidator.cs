@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using System.Text.RegularExpressions;
+using FluentValidation;
 
 namespace Messenger.Application.Chats.Commands.CreateChat;
 
@@ -6,9 +7,16 @@ public class CreateChatCommandValidator : AbstractValidator<CreateChatCommand>
 {
     public CreateChatCommandValidator()
     {
-        RuleFor(x => x.ChatName)
-            .NotEmpty().WithMessage("Имя чата не может быть пустым.");
-        RuleFor(x => x.ChatName).NotEmpty().WithMessage("Тип чата не может быть пустым");
-        RuleFor(x => x.CreatedBy).NotEmpty().WithMessage("Чат нельзя создать без создателя");
+        RuleFor(x => x.Name)
+            .NotEmpty().WithMessage("Имя чата обязательно")
+            .MaximumLength(100).WithMessage("Имя чата не должно превышать 100 символов")
+            .Matches(new Regex(@"^[a-zA-Zа-яА-Я0-9\s\-_]+$"))
+            .WithMessage("Имя чата может содержать только буквы, цифры, пробелы, дефисы и подчеркивания");
+
+        RuleFor(x => x.Type)
+            .IsInEnum().WithMessage("Недопустимый тип чата");
+
+        RuleFor(x => x.CreatorId)
+            .NotEmpty().WithMessage("Идентификатор создателя обязателен");
     }
 }

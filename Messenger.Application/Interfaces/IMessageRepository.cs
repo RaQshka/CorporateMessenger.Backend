@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Messenger.Domain;
+using Messenger.Domain.Entities;
 
 namespace Messenger.Application.Interfaces;
 

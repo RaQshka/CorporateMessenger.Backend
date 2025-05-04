@@ -156,6 +156,7 @@ namespace Messenger.WebApi
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseMiddleware<AuditMiddleware>();
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
             app.UseEndpoints(e => e.MapControllers());
         }
     }

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace Messenger.Domain;
+namespace Messenger.Domain.Entities;
 
 public class Role : IdentityRole<Guid>
 {

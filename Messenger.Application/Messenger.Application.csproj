@@ -23,7 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Chats\Queries\" />
     <Folder Include="Messages\Commands\DeleteMessage\" />
     <Folder Include="Messages\Queries\GetMessageList\" />
   </ItemGroup>

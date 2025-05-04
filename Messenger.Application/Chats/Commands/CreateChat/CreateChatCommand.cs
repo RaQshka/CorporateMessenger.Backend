@@ -1,11 +1,11 @@
 ﻿using MediatR;
-using Messenger.Application.Chats.Commands.Shared;
+using Messenger.Domain.Enums;
 
 namespace Messenger.Application.Chats.Commands.CreateChat;
 
-public class CreateChatCommand : IRequest<ChatDto>
+public class CreateChatCommand : IRequest<Guid>
 {
-    public string ChatName { get; set; } = string.Empty;
-    public string ChatType { get; set; } = string.Empty;
-    public Guid CreatedBy { get; set; }
+    public string Name { get; set; }
+    public ChatTypes Type { get; set; }
+    public Guid CreatorId { get; set; }
 }

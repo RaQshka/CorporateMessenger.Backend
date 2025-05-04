@@ -1,32 +1,44 @@
 ﻿using MediatR;
+using Messenger.Application.Common.Exceptions;
+using Messenger.Application.Interfaces;
+using Messenger.Domain.Entities;
+using Messenger.Domain.Enums;
+using Microsoft.AspNetCore.Identity;
 
 namespace Messenger.Application.Chats.Commands.RemoveUserFromChat;
 
-public class RemoveUserFromChatCommandHandler : IRequestHandler<RemoveUserFromChatCommand, bool>
+public class RemoveUserFromChatCommandHandler : IRequestHandler<RemoveUserFromChatCommand, Unit>
 {
-    private readonly IChatRepository _chatRepository;
+    private readonly IChatParticipantService _participantService;
+    private readonly IChatAccessService _accessService;
 
-    public RemoveUserFromChatCommandHandler(IChatRepository chatRepository)
+    public RemoveUserFromChatCommandHandler(
+        IChatParticipantService participantService,
+        IChatAccessService accessService)
     {
-        _chatRepository = chatRepository;
+        _participantService = participantService;
+        _accessService = accessService;
     }
 
-    public async Task<bool> Handle(RemoveUserFromChatCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(RemoveUserFromChatCommand request, CancellationToken cancellationToken)
     {
-        var chat = await _chatRepository.GetChatByIdAsync(request.ChatId, cancellationToken);
-        if (chat == null)
-            return false;
+        //проверка есть ли доступ удалять пользователя у инициатора
+        bool hasAccess = await _accessService.HasAccessAsync(
+            request.ChatId,
+            request.InitiatorId,
+            ChatAccess.RemoveParticipant,
+            cancellationToken);
 
-        // Здесь также проверяем, что запрашивающий имеет право удалять участника (например, только администратор или создатель)
-        if (chat.CreatedBy != request.RequestedBy && !chat.ChatParticipants.Any(cp => cp.UserId == request.RequestedBy && cp.IsAdmin))
-            throw new UnauthorizedAccessException("У вас нет прав удалять участников из этого чата.");
+        if (!hasAccess)
+        {
+            throw new AccessDeniedException("Удаление пользователя из чата", request.ChatId, request.InitiatorId);
+        }
 
-        var participant = chat.ChatParticipants.FirstOrDefault(cp => cp.UserId == request.UserIdToRemove);
-        if (participant == null)
-            return false;
+        await _participantService.RemoveAsync(
+            request.ChatId,
+            request.UserId,
+            cancellationToken);
 
-        chat.ChatParticipants.Remove(participant);
-        await _chatRepository.UpdateChatAsync(chat, cancellationToken);
-        return true;
+        return Unit.Value;
     }
 }

@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Messenger.Domain;
+using Messenger.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 namespace Messenger.Application.Users.Commands.LogoutUser;

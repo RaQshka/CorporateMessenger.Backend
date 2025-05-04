@@ -1,44 +1,30 @@
 ﻿using AutoMapper;
 using MediatR;
-using Messenger.Application.Chats.Commands.Shared;
+using Messenger.Application.Common.Exceptions;
+using Messenger.Application.Interfaces;
 using Messenger.Domain;
+using Messenger.Domain.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace Messenger.Application.Chats.Commands.CreateChat;
 
-
-public class CreateChatCommandHandler : IRequestHandler<CreateChatCommand, ChatDto>
+public class CreateChatCommandHandler : IRequestHandler<CreateChatCommand, Guid>
 {
-    private readonly IChatRepository _chatRepository;
-    private readonly IMapper _mapper;
+    private readonly IChatService _chatService;
 
-    public CreateChatCommandHandler(IChatRepository chatRepository, IMapper mapper)
+    public CreateChatCommandHandler(IChatService chatService, UserManager<User> userManager)
     {
-        _chatRepository = chatRepository;
-        _mapper = mapper;
+        _chatService = chatService;
     }
 
-    public async Task<ChatDto> Handle(CreateChatCommand request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(CreateChatCommand request, CancellationToken cancellationToken)
     {
-        var chat = new Chat
-        {
-            Id = Guid.NewGuid(),
-            ChatName = request.ChatName,
-            ChatType = request.ChatType,
-            CreatedBy = request.CreatedBy,
-            CreatedAt = DateTime.UtcNow,
-        };
+        var chat = await _chatService.CreateAsync(
+            request.Name,
+            request.Type,
+            request.CreatorId,
+            cancellationToken);
 
-        chat.ChatParticipants = new List<ChatParticipant>()
-        {
-            new ()
-            {
-                ChatId = chat.Id,
-                UserId = request.CreatedBy,
-                IsAdmin = true
-            }
-        };
-        
-        var createdChat = await _chatRepository.CreateChatAsync(chat, cancellationToken);
-        return _mapper.Map<ChatDto>(createdChat);
+        return chat.Id;
     }
 }

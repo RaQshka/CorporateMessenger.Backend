@@ -4,6 +4,7 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Messenger.Application.Interfaces;
 using Messenger.Domain;
+using Messenger.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 

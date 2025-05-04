@@ -2,6 +2,7 @@
 using MediatR;
 using Messenger.Application.Users.Queries.Shared;
 using Messenger.Domain;
+using Messenger.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 
 namespace Messenger.Application.Users.Queries.GetUsers;

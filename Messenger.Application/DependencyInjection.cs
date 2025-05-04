@@ -17,8 +17,6 @@ public static class DependencyInjection
             typeof(IPipelineBehavior<,>), 
             typeof(ValidationBehavior<,>));
         
-
-        
         return services;
     }
 }

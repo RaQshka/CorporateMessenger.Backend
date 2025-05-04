@@ -2,9 +2,9 @@
 
 namespace Messenger.Application.Chats.Commands.AddUserToChat;
 
-public class AddUserToChatCommand : IRequest<bool>
+public class AddUserToChatCommand : IRequest<Unit>
 {
     public Guid ChatId { get; set; }
-    public Guid UserIdToAdd { get; set; }
-    public Guid RequestedBy { get; set; } // Кто запрашивает добавление (для проверки прав)
+    public Guid UserId { get; set; }
+    public Guid InitiatorId { get; set; }
 }

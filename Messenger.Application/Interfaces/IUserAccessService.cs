@@ -1,5 +1,6 @@
 ﻿namespace Messenger.Application.Interfaces;
 
+/*
 public interface IUserAccessService
 {
     /// <summary>
@@ -20,3 +21,4 @@ public interface IUserAccessService
     /// </summary>
     Task<bool> CanAssignAdminAsync(Guid chatId, Guid userId);
 }
+*/

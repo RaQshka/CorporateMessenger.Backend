@@ -1,39 +1,40 @@
 ﻿using MediatR;
+using Messenger.Application.Common.Exceptions;
+using Messenger.Application.Interfaces;
 using Messenger.Domain;
+using Messenger.Domain.Entities;
+using Messenger.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 
 namespace Messenger.Application.Chats.Commands.DeleteChat;
 
-public class DeleteChatCommandHandler : IRequestHandler<DeleteChatCommand, bool>
+public class DeleteChatCommandHandler : IRequestHandler<DeleteChatCommand, Unit>
 {
-    private readonly IChatRepository _chatRepository;
-    private readonly UserManager<User> _userManager;
-    private readonly RoleManager<Role> _roleManager;
-    public DeleteChatCommandHandler(IChatRepository chatRepository, UserManager<User> userManager, RoleManager<Role> roleManager)
+    private readonly IChatService _chatService;
+    private readonly IChatAccessService _accessService;
+
+    public DeleteChatCommandHandler(
+        IChatService chatService,
+        IChatAccessService accessService)
     {
-        _chatRepository = chatRepository;
-        _userManager = userManager;
-        _roleManager = roleManager;
+        _chatService = chatService;
+        _accessService = accessService;
     }
 
-    public async Task<bool> Handle(DeleteChatCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(DeleteChatCommand request, CancellationToken cancellationToken)
     {
-        var user = await _userManager.FindByIdAsync(request.UserId.ToString());
+        bool hasAccess = await _accessService.HasAccessAsync(
+            request.ChatId,
+            request.InitiatorId,
+            ChatAccess.DeleteChat,
+            cancellationToken);
 
-        if (user == null)
+        if (!hasAccess)
         {
-            return false;
+            throw new AccessDeniedException("Удаление чата", request.ChatId, request.InitiatorId);
         }
 
-        if (await _userManager.IsInRoleAsync(user, "Admin"))
-        {
-            
-        }
-        
-        
-        await _chatRepository.DeleteChatAsync(request.ChatId, cancellationToken);
-        return true;
+        await _chatService.DeleteAsync(request.ChatId, cancellationToken);
+        return Unit.Value;
     }
-    
-    
 }

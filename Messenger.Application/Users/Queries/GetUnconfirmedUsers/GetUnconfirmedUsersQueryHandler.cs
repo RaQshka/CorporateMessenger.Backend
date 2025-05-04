@@ -3,6 +3,7 @@ using MediatR;
 using Messenger.Application.Users.Queries.Shared;
 using Microsoft.AspNetCore.Identity;
 using Messenger.Domain;
+using Messenger.Domain.Entities;
 
 namespace Messenger.Application.Users.Queries.GetUnconfirmedUsers;
 

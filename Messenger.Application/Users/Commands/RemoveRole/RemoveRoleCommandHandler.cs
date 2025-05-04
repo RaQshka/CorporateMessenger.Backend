@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Messenger.Domain;
+using Messenger.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 

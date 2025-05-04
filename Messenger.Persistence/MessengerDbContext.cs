@@ -1,5 +1,6 @@
 ﻿using Messenger.Application.Interfaces;
 using Messenger.Domain;
+using Messenger.Domain.Entities;
 using Messenger.Persistence.EntityTypeConfiguration;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

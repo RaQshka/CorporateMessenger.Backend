@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Messenger.Application.Common.Mappings;
 using Messenger.Domain;
+using Messenger.Domain.Entities;
 
 namespace Messenger.Application.Users.Queries.Shared;
 

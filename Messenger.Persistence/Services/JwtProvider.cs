@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Text;
 using Messenger.Application.Interfaces;
 using Messenger.Domain;
+using Messenger.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;

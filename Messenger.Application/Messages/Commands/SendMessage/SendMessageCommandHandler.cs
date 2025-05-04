@@ -1,10 +1,10 @@
-﻿using AutoMapper;
+﻿/*using AutoMapper;
 using MediatR;
 using Messenger.Application.Interfaces;
 using Messenger.Application.Messages.Commands.Shared;
-using Messenger.Domain;
+using Messenger.Domain.Entities;
 
-namespace Messenger.Application.Messages.Commands.SendMessage.Messenger.Application.Messages.Commands.SendMessage;
+namespace Messenger.Application.Messages.Commands.SendMessage;
 
 public class SendMessageCommandHandler : IRequestHandler<SendMessageCommand, MessageDto>
 {
@@ -41,4 +41,4 @@ public class SendMessageCommandHandler : IRequestHandler<SendMessageCommand, Mes
         var createdMessage = await _messageRepository.SendMessageAsync(message, cancellationToken);
         return _mapper.Map<MessageDto>(createdMessage);
     }
-}
+}*/

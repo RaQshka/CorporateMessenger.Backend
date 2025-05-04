@@ -2,8 +2,8 @@
 
 namespace Messenger.Application.Chats.Commands.DeleteChat;
 
-public class DeleteChatCommand : IRequest<bool>
+public class DeleteChatCommand : IRequest<Unit>
 {
     public Guid ChatId { get; set; }
-    public Guid UserId { get; set; }
+    public Guid InitiatorId { get; set; }
 }

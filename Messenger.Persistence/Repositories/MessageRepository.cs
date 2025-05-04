@@ -1,8 +1,9 @@
 ﻿using Messenger.Application.Interfaces;
 using Messenger.Domain;
+using Messenger.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Messenger.Persistence.Services;
+namespace Messenger.Persistence.Repositories;
 
 public class MessageRepository : IMessageRepository
 {

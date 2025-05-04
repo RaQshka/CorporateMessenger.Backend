@@ -1,10 +1,12 @@
 ﻿using Messenger.Application.Interfaces;
 using Messenger.Domain;
+using Messenger.Domain.Entities;
 using Messenger.Domain.Enums;
 using Microsoft.AspNetCore.Http;
 
 namespace Messenger.Persistence.Services;
 
+//TODO: Разделить ответственность логгера: сделать для него отдельный репозиторий и использовать его сервисы.
 public class AuditLogger:IAuditLogger
 {
     private readonly MessengerDbContext _context;

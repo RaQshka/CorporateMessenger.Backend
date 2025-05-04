@@ -1,49 +1,52 @@
 ﻿using MediatR;
+using Messenger.Application.Common.Exceptions;
 using Messenger.Application.Interfaces;
 using Messenger.Domain;
+using Messenger.Domain.Entities;
+using Messenger.Domain.Enums;
+using Microsoft.AspNetCore.Identity;
 
 namespace Messenger.Application.Chats.Commands.AddUserToChat;
 
-public class AddUserToChatCommandHandler : IRequestHandler<AddUserToChatCommand, bool>
+public class AddUserToChatCommandHandler : IRequestHandler<AddUserToChatCommand, Unit>
 {
-    private readonly IChatRepository _chatRepository;
-    private readonly IUserAccessService _userAccessService;
+    private readonly IChatParticipantService _participantService;
+    private readonly IChatAccessService _accessService;
+    private readonly IChatService _chatService;
+    private readonly UserManager<User> _userManager;
 
-    public AddUserToChatCommandHandler(IChatRepository chatRepository, IUserAccessService userAccessService)
+    public AddUserToChatCommandHandler(
+        IChatParticipantService participantService,
+        IChatAccessService accessService,
+        IChatService chatService,
+        UserManager<User> userManager)
     {
-        _chatRepository = chatRepository;
-        _userAccessService = userAccessService;
+        _participantService = participantService;
+        _accessService = accessService;
+        _chatService = chatService;
+        _userManager = userManager;
     }
 
-    public async Task<bool> Handle(AddUserToChatCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(AddUserToChatCommand request, CancellationToken cancellationToken)
     {
-        // Допустим, проверяем, имеет ли пользователь, выполняющий запрос, право добавлять участников.
-        // Здесь можно использовать другую логику, например, только создатель или администраторы могут добавлять.
-        var chat = await _chatRepository.GetChatByIdAsync(request.ChatId, cancellationToken);
-        if (chat == null)
-            return false;
+        bool hasAccess = await _accessService.HasAccessAsync(
+            request.ChatId,
+            request.InitiatorId,
+            ChatAccess.AddParticipant,
+            cancellationToken);
 
-        // Проверяем, что запрашивающий является создателем или администратором
-        if (chat.CreatedBy != request.RequestedBy && !chat.ChatParticipants.Any(cp => cp.UserId == request.RequestedBy && cp.IsAdmin))
-            throw new UnauthorizedAccessException("У вас нет прав добавлять пользователей в этот чат.");
-
-        // Проверяем, может ли добавляемый пользователь присоединиться (по логике доступа, если нужно)
-        var canJoin = await _userAccessService.CanJoinChatAsync(request.ChatId, request.UserIdToAdd);
-        if (!canJoin)
-            throw new UnauthorizedAccessException("Пользователь не может быть добавлен в этот чат.");
-
-        // Добавляем пользователя в чат
-        // Здесь можно либо напрямую обновить коллекцию chat.ChatParticipants, либо использовать репозиторий.
-        // Предположим, что IChatRepository имеет метод UpdateChatAsync
-        chat.ChatParticipants.Add(new ChatParticipant
+        if (!hasAccess)
         {
-            ChatId = request.ChatId,
-            UserId = request.UserIdToAdd,
-            JoinedAt = DateTime.UtcNow,
-            IsAdmin = false
-        });
+            throw new AccessDeniedException("Добавление пользователя в чат", request.ChatId, request.InitiatorId);
+        }
 
-        await _chatRepository.UpdateChatAsync(chat, cancellationToken);
-        return true;
+        //по дефолту добавляемый юзер не может быть админом
+        await _participantService.AddAsync(
+            request.ChatId,
+            request.UserId,
+            false,
+            cancellationToken);
+
+        return Unit.Value;
     }
 }

@@ -22,7 +22,7 @@ namespace Messenger.Persistence.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Messenger.Domain.AuditLog", b =>
+            modelBuilder.Entity("Messenger.Domain.Entities.AuditLog", b =>
                 {
                     b.Property<Guid>("LogId")
                         .ValueGeneratedOnAdd()
@@ -65,18 +65,14 @@ namespace Messenger.Persistence.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AuditLogs");
+                    b.ToTable("AuditLogs", (string)null);
                 });
 
-            modelBuilder.Entity("Messenger.Domain.Chat", b =>
+            modelBuilder.Entity("Messenger.Domain.Entities.Chat", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("AccessPolicy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ChatName")
                         .IsRequired()
@@ -97,52 +93,39 @@ namespace Messenger.Persistence.Migrations
 
                     b.HasIndex("CreatedBy");
 
-                    b.ToTable("Chats");
+                    b.ToTable("Chats", (string)null);
                 });
 
-            modelBuilder.Entity("Messenger.Domain.ChatAccessRule", b =>
+            modelBuilder.Entity("Messenger.Domain.Entities.ChatAccessRule", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("AccessMask")
+                        .HasColumnType("int");
+
                     b.Property<Guid>("ChatId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("IsAdmin")
-                        .HasColumnType("bit");
+                    b.Property<Guid?>("ChatId1")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("JoinedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid>("RoleId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ChatId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("ChatId1");
 
-                    b.ToTable("ChatAccessRules");
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("ChatAccessRules", (string)null);
                 });
 
-            modelBuilder.Entity("Messenger.Domain.ChatAccessRuleRole", b =>
-                {
-                    b.Property<Guid>("ChatAccessRuleID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("RoleID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("ChatAccessRuleID", "RoleID");
-
-                    b.HasIndex("RoleID");
-
-                    b.ToTable("ChatAccessRuleRoles");
-                });
-
-            modelBuilder.Entity("Messenger.Domain.ChatParticipant", b =>
+            modelBuilder.Entity("Messenger.Domain.Entities.ChatParticipant", b =>
                 {
                     b.Property<Guid>("ChatId")
                         .HasColumnType("uniqueidentifier");
@@ -160,10 +143,10 @@ namespace Messenger.Persistence.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ChatParticipants");
+                    b.ToTable("ChatParticipants", (string)null);
                 });
 
-            modelBuilder.Entity("Messenger.Domain.Document", b =>
+            modelBuilder.Entity("Messenger.Domain.Entities.Document", b =>
                 {
                     b.Property<Guid>("DocumentID")
                         .ValueGeneratedOnAdd()
@@ -200,10 +183,10 @@ namespace Messenger.Persistence.Migrations
 
                     b.HasIndex("UploaderID");
 
-                    b.ToTable("Documents");
+                    b.ToTable("Documents", (string)null);
                 });
 
-            modelBuilder.Entity("Messenger.Domain.DocumentAccessRule", b =>
+            modelBuilder.Entity("Messenger.Domain.Entities.DocumentAccessRule", b =>
                 {
                     b.Property<Guid>("DocumentAccessRuleID")
                         .ValueGeneratedOnAdd()
@@ -223,10 +206,10 @@ namespace Messenger.Persistence.Migrations
 
                     b.HasIndex("DocumentID");
 
-                    b.ToTable("DocumentAccessRules");
+                    b.ToTable("DocumentAccessRules", (string)null);
                 });
 
-            modelBuilder.Entity("Messenger.Domain.DocumentAccessRuleRole", b =>
+            modelBuilder.Entity("Messenger.Domain.Entities.DocumentAccessRuleRole", b =>
                 {
                     b.Property<Guid>("DocumentAccessRuleID")
                         .HasColumnType("uniqueidentifier");
@@ -238,10 +221,10 @@ namespace Messenger.Persistence.Migrations
 
                     b.HasIndex("RoleID");
 
-                    b.ToTable("DocumentAccessRuleRoles");
+                    b.ToTable("DocumentAccessRuleRoles", (string)null);
                 });
 
-            modelBuilder.Entity("Messenger.Domain.Message", b =>
+            modelBuilder.Entity("Messenger.Domain.Entities.Message", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -272,10 +255,10 @@ namespace Messenger.Persistence.Migrations
 
                     b.HasIndex("SenderId");
 
-                    b.ToTable("Messages");
+                    b.ToTable("Messages", (string)null);
                 });
 
-            modelBuilder.Entity("Messenger.Domain.RefreshToken", b =>
+            modelBuilder.Entity("Messenger.Domain.Entities.RefreshToken", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -295,10 +278,10 @@ namespace Messenger.Persistence.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("RefreshTokens");
+                    b.ToTable("RefreshTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Messenger.Domain.Role", b =>
+            modelBuilder.Entity("Messenger.Domain.Entities.Role", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -326,7 +309,7 @@ namespace Messenger.Persistence.Migrations
                     b.ToTable("AspNetRoles", (string)null);
                 });
 
-            modelBuilder.Entity("Messenger.Domain.User", b =>
+            modelBuilder.Entity("Messenger.Domain.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -521,9 +504,9 @@ namespace Messenger.Persistence.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Messenger.Domain.AuditLog", b =>
+            modelBuilder.Entity("Messenger.Domain.Entities.AuditLog", b =>
                 {
-                    b.HasOne("Messenger.Domain.User", "User")
+                    b.HasOne("Messenger.Domain.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -532,62 +515,47 @@ namespace Messenger.Persistence.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Messenger.Domain.Chat", b =>
+            modelBuilder.Entity("Messenger.Domain.Entities.Chat", b =>
                 {
-                    b.HasOne("Messenger.Domain.User", null)
+                    b.HasOne("Messenger.Domain.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("CreatedBy")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Messenger.Domain.ChatAccessRule", b =>
+            modelBuilder.Entity("Messenger.Domain.Entities.ChatAccessRule", b =>
                 {
-                    b.HasOne("Messenger.Domain.Chat", "Chat")
+                    b.HasOne("Messenger.Domain.Entities.Chat", "Chat")
                         .WithMany()
                         .HasForeignKey("ChatId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Messenger.Domain.User", "User")
+                    b.HasOne("Messenger.Domain.Entities.Chat", null)
+                        .WithMany("ChatAccessRules")
+                        .HasForeignKey("ChatId1");
+
+                    b.HasOne("Messenger.Domain.Entities.Role", "Role")
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Chat");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Messenger.Domain.ChatAccessRuleRole", b =>
-                {
-                    b.HasOne("Messenger.Domain.ChatAccessRule", "ChatAccessRule")
-                        .WithMany("ChatAccessRuleRoles")
-                        .HasForeignKey("ChatAccessRuleID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Messenger.Domain.Role", "Role")
-                        .WithMany("ChatAccessRuleRoles")
-                        .HasForeignKey("RoleID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ChatAccessRule");
 
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("Messenger.Domain.ChatParticipant", b =>
+            modelBuilder.Entity("Messenger.Domain.Entities.ChatParticipant", b =>
                 {
-                    b.HasOne("Messenger.Domain.Chat", "Chat")
+                    b.HasOne("Messenger.Domain.Entities.Chat", "Chat")
                         .WithMany("ChatParticipants")
                         .HasForeignKey("ChatId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Messenger.Domain.User", "User")
+                    b.HasOne("Messenger.Domain.Entities.User", "User")
                         .WithMany("ChatParticipants")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -598,15 +566,15 @@ namespace Messenger.Persistence.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Messenger.Domain.Document", b =>
+            modelBuilder.Entity("Messenger.Domain.Entities.Document", b =>
                 {
-                    b.HasOne("Messenger.Domain.Chat", "Chat")
+                    b.HasOne("Messenger.Domain.Entities.Chat", "Chat")
                         .WithMany("Documents")
                         .HasForeignKey("ChatID")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Messenger.Domain.User", "Uploader")
+                    b.HasOne("Messenger.Domain.Entities.User", "Uploader")
                         .WithMany("Documents")
                         .HasForeignKey("UploaderID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -617,9 +585,9 @@ namespace Messenger.Persistence.Migrations
                     b.Navigation("Uploader");
                 });
 
-            modelBuilder.Entity("Messenger.Domain.DocumentAccessRule", b =>
+            modelBuilder.Entity("Messenger.Domain.Entities.DocumentAccessRule", b =>
                 {
-                    b.HasOne("Messenger.Domain.Document", "Document")
+                    b.HasOne("Messenger.Domain.Entities.Document", "Document")
                         .WithMany()
                         .HasForeignKey("DocumentID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -628,15 +596,15 @@ namespace Messenger.Persistence.Migrations
                     b.Navigation("Document");
                 });
 
-            modelBuilder.Entity("Messenger.Domain.DocumentAccessRuleRole", b =>
+            modelBuilder.Entity("Messenger.Domain.Entities.DocumentAccessRuleRole", b =>
                 {
-                    b.HasOne("Messenger.Domain.DocumentAccessRule", "DocumentAccessRule")
+                    b.HasOne("Messenger.Domain.Entities.DocumentAccessRule", "DocumentAccessRule")
                         .WithMany()
                         .HasForeignKey("DocumentAccessRuleID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Messenger.Domain.Role", "Role")
+                    b.HasOne("Messenger.Domain.Entities.Role", "Role")
                         .WithMany("DocumentAccessRuleRoles")
                         .HasForeignKey("RoleID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -647,15 +615,15 @@ namespace Messenger.Persistence.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("Messenger.Domain.Message", b =>
+            modelBuilder.Entity("Messenger.Domain.Entities.Message", b =>
                 {
-                    b.HasOne("Messenger.Domain.Chat", "Chat")
+                    b.HasOne("Messenger.Domain.Entities.Chat", "Chat")
                         .WithMany("Messages")
                         .HasForeignKey("ChatId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Messenger.Domain.User", "Sender")
+                    b.HasOne("Messenger.Domain.Entities.User", "Sender")
                         .WithMany("Messages")
                         .HasForeignKey("SenderId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -666,9 +634,9 @@ namespace Messenger.Persistence.Migrations
                     b.Navigation("Sender");
                 });
 
-            modelBuilder.Entity("Messenger.Domain.RefreshToken", b =>
+            modelBuilder.Entity("Messenger.Domain.Entities.RefreshToken", b =>
                 {
-                    b.HasOne("Messenger.Domain.User", "User")
+                    b.HasOne("Messenger.Domain.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -679,7 +647,7 @@ namespace Messenger.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
-                    b.HasOne("Messenger.Domain.Role", null)
+                    b.HasOne("Messenger.Domain.Entities.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -688,7 +656,7 @@ namespace Messenger.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
                 {
-                    b.HasOne("Messenger.Domain.User", null)
+                    b.HasOne("Messenger.Domain.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -697,7 +665,7 @@ namespace Messenger.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
                 {
-                    b.HasOne("Messenger.Domain.User", null)
+                    b.HasOne("Messenger.Domain.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -706,13 +674,13 @@ namespace Messenger.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
                 {
-                    b.HasOne("Messenger.Domain.Role", null)
+                    b.HasOne("Messenger.Domain.Entities.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Messenger.Domain.User", null)
+                    b.HasOne("Messenger.Domain.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -721,15 +689,17 @@ namespace Messenger.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
                 {
-                    b.HasOne("Messenger.Domain.User", null)
+                    b.HasOne("Messenger.Domain.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Messenger.Domain.Chat", b =>
+            modelBuilder.Entity("Messenger.Domain.Entities.Chat", b =>
                 {
+                    b.Navigation("ChatAccessRules");
+
                     b.Navigation("ChatParticipants");
 
                     b.Navigation("Documents");
@@ -737,19 +707,12 @@ namespace Messenger.Persistence.Migrations
                     b.Navigation("Messages");
                 });
 
-            modelBuilder.Entity("Messenger.Domain.ChatAccessRule", b =>
+            modelBuilder.Entity("Messenger.Domain.Entities.Role", b =>
                 {
-                    b.Navigation("ChatAccessRuleRoles");
-                });
-
-            modelBuilder.Entity("Messenger.Domain.Role", b =>
-                {
-                    b.Navigation("ChatAccessRuleRoles");
-
                     b.Navigation("DocumentAccessRuleRoles");
                 });
 
-            modelBuilder.Entity("Messenger.Domain.User", b =>
+            modelBuilder.Entity("Messenger.Domain.Entities.User", b =>
                 {
                     b.Navigation("ChatParticipants");
 

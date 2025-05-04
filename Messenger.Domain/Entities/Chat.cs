@@ -1,10 +1,9 @@
-﻿namespace Messenger.Domain;
+﻿namespace Messenger.Domain.Entities;
 
 public class Chat
 {
-    public Guid Id { get; set; }                       // Ранее ChatID
+    public Guid Id { get; set; }
     public string ChatName { get; set; } = string.Empty;
-    // Можно сделать ChatType перечислением, но пока оставим строкой
     public string ChatType { get; set; } = string.Empty;
     public Guid CreatedBy { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

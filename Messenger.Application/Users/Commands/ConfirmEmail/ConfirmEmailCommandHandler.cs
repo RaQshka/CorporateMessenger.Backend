@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Messenger.Domain;
+using Messenger.Domain.Entities;
 
 namespace Messenger.Application.Users.Commands.ConfirmEmail;
 

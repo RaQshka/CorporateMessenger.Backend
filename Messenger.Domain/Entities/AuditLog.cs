@@ -1,7 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Messenger.Domain.Enums;
+﻿using Messenger.Domain.Enums;
 
-namespace Messenger.Domain;
+namespace Messenger.Domain.Entities;
 
 
 public class AuditLog

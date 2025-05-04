@@ -2,9 +2,9 @@
 
 namespace Messenger.Application.Chats.Commands.RemoveUserFromChat;
 
-public class RemoveUserFromChatCommand : IRequest<bool>
+public class RemoveUserFromChatCommand : IRequest<Unit>
 {
     public Guid ChatId { get; set; }
-    public Guid UserIdToRemove { get; set; }
-    public Guid RequestedBy { get; set; }
+    public Guid UserId { get; set; }
+    public Guid InitiatorId { get; set; }
 }

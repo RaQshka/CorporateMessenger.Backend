@@ -1,6 +1,8 @@
 ﻿using Messenger.Application.Interfaces;
 using Messenger.Domain;
+using Messenger.Domain.Entities;
 using Messenger.Persistence.Migrations;
+using Messenger.Persistence.Repositories;
 using Messenger.Persistence.Services;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -11,25 +13,10 @@ using Microsoft.Extensions.Configuration;
 namespace Messenger.Persistence;
 public static class DependencyInjection
 {
-    /*public static IServiceCollection AddPersistance(this IServiceCollection services, 
-        IConfiguration configuration)
-    {
-        var connectionString = configuration.GetConnectionString("DbConnection");
-        services.AddDbContext<MessengerDbContext>(options => options.UseSqlServer(connectionString));
-        
-        services.AddIdentity<User, IdentityRole<Guid>>()
-            .AddEntityFrameworkStores<MessengerDbContext>()
-            .AddDefaultTokenProviders();
-        
-        services.AddScoped<IMessengerDbContext>(provider => provider.GetRequiredService<MessengerDbContext>());
-        services.AddTransient<IEmailSender, EmailSender>();
-        services.AddScoped<IJwtProvider, JwtProvider>();
-        return services;
-    }*/
     public static IServiceCollection AddPersistance(this IServiceCollection services, IConfiguration configuration)
     {
         var connectionString = configuration.GetConnectionString("DefaultConnection");
-        services.AddDbContext<MessengerDbContext>(options => options.UseSqlServer(connectionString));
+        services.AddDbContext<MessengerDbContext>(options => options.UseSqlServer(connectionString).EnableSensitiveDataLogging());
 
         services.AddIdentity<User, Role>()
             .AddEntityFrameworkStores<MessengerDbContext>()
@@ -40,12 +27,12 @@ public static class DependencyInjection
         services.AddScoped<RoleManager<Role>>();
         services.AddScoped<SignInManager<User>>();
         services.AddTransient<MessengerDbContextFactory>();
+        // Аудит
+        services.AddScoped<IAuditLogger, AuditLogger>();
+        
         // JWT-сервис
         services.AddScoped<IJwtProvider, JwtProvider>();
         services.AddScoped<IRefreshTokenService, RefreshTokenService>();
-        
-        // Аудит
-        services.AddScoped<IAuditLogger, AuditLogger>();
         
         // Email-сервис
         services.AddTransient<IEmailSender, EmailSender>();
@@ -54,7 +41,13 @@ public static class DependencyInjection
         services.AddScoped<IMessengerDbContext>(provider => provider.GetRequiredService<MessengerDbContext>());
         services.AddScoped<IMessageRepository, MessageRepository>();
         services.AddScoped<IChatRepository, ChatRepository>();
-        //services.AddTransient<IUserAccessService, UserAccessService>();
+        services.AddScoped<IChatAccessRepository, ChatAccessRepository>();
+        services.AddScoped<IChatParticipantRepository, ChatParticipantRepository>();
+
+        services.AddScoped<IChatService, ChatService>();
+        services.AddScoped<IChatAccessService, ChatAccessService>();
+        services.AddScoped<IChatParticipantService, ChatParticipantService>();
+
         return services;
     }
 

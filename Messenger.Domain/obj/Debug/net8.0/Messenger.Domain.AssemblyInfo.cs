@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Messenger.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f2fb4d74cf7186e4654fd63d4ce9c14ee4582b30")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e700af1718663ebb2c96eac6c17ba7932dea57fd")]
 [assembly: System.Reflection.AssemblyProductAttribute("Messenger.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Messenger.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
