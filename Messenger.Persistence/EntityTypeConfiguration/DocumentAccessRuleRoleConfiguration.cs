@@ -10,6 +10,15 @@ public class DocumentAccessRuleRoleConfiguration : IEntityTypeConfiguration<Docu
     public void Configure(EntityTypeBuilder<DocumentAccessRuleRole> builder)
     {
         builder.HasKey(darr => new { darr.DocumentAccessRuleID, darr.RoleID });
-        //builder.HasOne(darr => darr.Role).WithMany().HasForeignKey(darr => darr.RoleID);
+
+        builder.HasOne(darr => darr.DocumentAccessRule)
+            .WithMany()
+            .HasForeignKey(darr => darr.DocumentAccessRuleID)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasOne(darr => darr.Role)
+            .WithMany(r => r.DocumentAccessRuleRoles)
+            .HasForeignKey(darr => darr.RoleID)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

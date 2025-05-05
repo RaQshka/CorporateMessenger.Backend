@@ -12,22 +12,29 @@ public class ChatConfiguration : IEntityTypeConfiguration<Chat>
         builder.HasKey(c => c.Id);
         builder.Property(c => c.ChatName).IsRequired().HasMaxLength(200);
         builder.HasOne<User>().WithMany().HasForeignKey(c => c.CreatedBy);
-        // Конфигурация связи Chat -> ChatParticipant с каскадным удалением
-        
+
+        // Связь Chat -> ChatParticipants с каскадным удалением
         builder.HasMany(c => c.ChatParticipants)
             .WithOne(cp => cp.Chat)
             .HasForeignKey(cp => cp.ChatId)
-            .OnDelete(DeleteBehavior.Cascade); // Каскадное удаление
+            .OnDelete(DeleteBehavior.Cascade);
 
-        // Конфигурация связи Chat -> ChatAccessRule с каскадным удалением
+        // Связь Chat -> ChatAccessRules с каскадным удалением
         builder.HasMany(c => c.ChatAccessRules)
             .WithOne(car => car.Chat)
             .HasForeignKey(car => car.ChatId)
-            .OnDelete(DeleteBehavior.Cascade); // Каскадное удаление
-        // Конфигурация связи Chat -> ChatAccessRule с каскадным удалением
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // Связь Chat -> Messages с каскадным удалением
         builder.HasMany(c => c.Messages)
-            .WithOne(car => car.Chat)
-            .HasForeignKey(car => car.ChatId)
-            .OnDelete(DeleteBehavior.Cascade); // Каскадное удаление
+            .WithOne(m => m.Chat)
+            .HasForeignKey(m => m.ChatId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // Связь Chat -> Documents с каскадным удалением
+        builder.HasMany(c => c.Documents)
+            .WithOne(d => d.Chat)
+            .HasForeignKey(d => d.ChatID)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

@@ -10,6 +10,12 @@ public class DocumentAccessRuleConfiguration : IEntityTypeConfiguration<Document
     public void Configure(EntityTypeBuilder<DocumentAccessRule> builder)
     {
         builder.HasKey(dar => dar.DocumentAccessRuleID);
+
+        builder.HasOne(dar => dar.Document)
+            .WithMany()
+            .HasForeignKey(dar => dar.DocumentID)
+            .OnDelete(DeleteBehavior.Cascade); // Добавлено каскадное удаление
+
         builder.Property(dar => dar.RuleDescription).IsRequired();
     }
 }

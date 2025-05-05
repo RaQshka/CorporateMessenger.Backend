@@ -5,11 +5,12 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Messenger.Persistence.EntityTypeConfiguration;
 
-public class RefreshTokenConfiguration:IEntityTypeConfiguration<RefreshToken>
+
+public class RefreshTokenConfiguration : IEntityTypeConfiguration<RefreshToken>
 {
     public void Configure(EntityTypeBuilder<RefreshToken> builder)
     {
-        builder.HasKey(rt => rt.Id); // 👈 Указываем первичный ключ
+        builder.HasKey(rt => rt.Id);
 
         builder.HasOne(rt => rt.User)
             .WithMany()

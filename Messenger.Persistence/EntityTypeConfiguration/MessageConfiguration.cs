@@ -14,12 +14,12 @@ public class MessageConfiguration : IEntityTypeConfiguration<Message>
         builder.HasOne(m => m.Chat)
             .WithMany(c => c.Messages)
             .HasForeignKey(m => m.ChatId)
-            .OnDelete(DeleteBehavior.Cascade); // Запрещаем каскадное удаление
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(m => m.Sender)
             .WithMany(u => u.Messages)
             .HasForeignKey(m => m.SenderId)
-            .OnDelete(DeleteBehavior.Restrict); // Оставляем каскадное удаление для отправителя
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.Property(m => m.Content).IsRequired().HasMaxLength(5000);
         builder.Property(m => m.SentAt).IsRequired();
