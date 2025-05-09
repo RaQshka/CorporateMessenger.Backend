@@ -49,6 +49,10 @@ public class ExceptionHandlingMiddleware
                 code = HttpStatusCode.Conflict;
                 result = JsonSerializer.Serialize(new { error = businessRule.Message });
                 break;
+            case FluentValidation.ValidationException fluentValidation:
+                code = HttpStatusCode.BadRequest;
+                result =JsonSerializer.Serialize(new { error = fluentValidation.Errors.Select(e => e.ErrorMessage)});
+                break;
             default:
                 result = JsonSerializer.Serialize(new { error = $"Произошла непредвиденная ошибка: {exception.Message}" });
                 break;
