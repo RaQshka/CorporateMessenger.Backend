@@ -2,6 +2,7 @@
 using System.Net.Mail;
 using MailKit.Security;
 using Messenger.Application.Interfaces;
+using Messenger.Application.Interfaces.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MimeKit;

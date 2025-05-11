@@ -2,9 +2,10 @@
 
 public class DocumentAccessRule
 {
-    public Guid DocumentAccessRuleID { get; set; }
-    public Guid DocumentID { get; set; }
+    public Guid Id { get; set; }
+    public Guid DocumentId { get; set; }
     public Document Document { get; set; }
-    public string RuleDescription { get; set; } = string.Empty;
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public Guid RoleId { get; set; }
+    public Role Role { get; set; }
+    public int DocumentAccessMask { get; set; }
 }

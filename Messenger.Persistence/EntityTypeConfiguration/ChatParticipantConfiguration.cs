@@ -14,12 +14,12 @@ public class ChatParticipantConfiguration : IEntityTypeConfiguration<ChatPartici
         builder.HasOne(cp => cp.Chat)
             .WithMany(c => c.ChatParticipants)
             .HasForeignKey(cp => cp.ChatId)
-            .OnDelete(DeleteBehavior.Cascade); // Изменено на Cascade для согласованности
+            .OnDelete(DeleteBehavior.Cascade); // Keep CASCADE for Chat deletion
 
         builder.HasOne(cp => cp.User)
             .WithMany(u => u.ChatParticipants)
             .HasForeignKey(cp => cp.UserId)
-            .OnDelete(DeleteBehavior.Restrict); // Оставляем Restrict для User
+            .OnDelete(DeleteBehavior.Restrict); // Changed to RESTRICT to avoid cascade conflict
 
         builder.Property(cp => cp.JoinedAt).IsRequired();
     }

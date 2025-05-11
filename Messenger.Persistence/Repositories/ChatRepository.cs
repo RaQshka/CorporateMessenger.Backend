@@ -1,4 +1,5 @@
 ﻿using Messenger.Application.Interfaces;
+using Messenger.Application.Interfaces.Repositories;
 using Messenger.Domain;
 using Messenger.Domain.Entities;
 using Microsoft.EntityFrameworkCore;

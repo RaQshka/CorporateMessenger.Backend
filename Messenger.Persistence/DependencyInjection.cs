@@ -1,4 +1,6 @@
 ﻿using Messenger.Application.Interfaces;
+using Messenger.Application.Interfaces.Repositories;
+using Messenger.Application.Interfaces.Services;
 using Messenger.Domain;
 using Messenger.Domain.Entities;
 using Messenger.Persistence.Migrations;
@@ -44,9 +46,20 @@ public static class DependencyInjection
         services.AddScoped<IChatAccessRepository, ChatAccessRepository>();
         services.AddScoped<IChatParticipantRepository, ChatParticipantRepository>();
 
+        services.AddScoped<IMessageRepository, MessageRepository>();
+        services.AddScoped<IDocumentRepository, DocumentRepository>();
+        services.AddScoped<IDocumentAccessRepository, DocumentAccessRepository>();
+        services.AddScoped<IReactionRepository, ReactionRepository>();
+        
         services.AddScoped<IChatService, ChatService>();
         services.AddScoped<IChatAccessService, ChatAccessService>();
         services.AddScoped<IChatParticipantService, ChatParticipantService>();
+        
+        services.AddScoped<IMessageService, MessageService>();
+        services.AddScoped<IReactionService, ReactionService>();
+        services.AddScoped<IDocumentRepository, DocumentRepository>();
+        services.AddScoped<IDocumentAccessRepository, DocumentAccessRepository>();
+
 
         return services;
     }

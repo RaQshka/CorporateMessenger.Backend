@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Messenger.Application.Interfaces;
+using Messenger.Application.Interfaces.Services;
 using Messenger.Application.Users.Commands.AssignRole;
 using Messenger.Application.Users.Commands.ConfirmEmail;
 using Messenger.Application.Users.Commands.LoginUser;

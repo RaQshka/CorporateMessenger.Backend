@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using MediatR;
 using Messenger.Application.Interfaces;
+using Messenger.Application.Interfaces.Services;
 using Messenger.Domain;
 using Messenger.Domain.Entities;
 using Microsoft.AspNetCore.Identity;

@@ -2,6 +2,7 @@
 using Messenger.Application.Chats.Queries.Shared;
 using Messenger.Application.Common.Exceptions;
 using Messenger.Application.Interfaces;
+using Messenger.Application.Interfaces.Services;
 using Messenger.Domain.Enums;
 
 namespace Messenger.Application.Chats.Queries.GetChatInfo;

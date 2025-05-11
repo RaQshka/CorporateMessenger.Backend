@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using Messenger.Application.Attributes;
 using Messenger.Application.Interfaces;
+using Messenger.Application.Interfaces.Services;
 using LogLevel = Messenger.Domain.Enums.LogLevel;
 
 namespace Messenger.WebApi.Middleware;

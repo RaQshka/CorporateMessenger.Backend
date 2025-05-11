@@ -2,6 +2,7 @@
 using MediatR;
 using Messenger.Application.Chats.Queries.Shared;
 using Messenger.Application.Interfaces;
+using Messenger.Application.Interfaces.Services;
 
 namespace Messenger.Application.Chats.Queries.GetUserChats;
 

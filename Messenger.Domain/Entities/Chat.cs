@@ -4,7 +4,7 @@ public class Chat
 {
     public Guid Id { get; set; }
     public string ChatName { get; set; } = string.Empty;
-    public string ChatType { get; set; } = string.Empty;
+    public int ChatType { get; set; }
     public Guid CreatedBy { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public ICollection<ChatParticipant> ChatParticipants { get; set; } = new List<ChatParticipant>();

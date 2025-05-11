@@ -7,8 +7,8 @@ namespace Messenger.Application.Chats.Queries.Shared;
 public class UserChatDto:IMapWith<Chat>
 {
     public Guid Id { get; set; }
-    public string Name { get; set; }
-    public string Type { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public string Type { get; set; } = string.Empty;
     
     public void Mapping(Profile profile)
     {

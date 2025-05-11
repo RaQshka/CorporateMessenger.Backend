@@ -5,7 +5,7 @@ namespace Messenger.Application.Chats.Commands.CreateChat;
 
 public class CreateChatCommand : IRequest<Guid>
 {
-    public string Name { get; set; }
+    public string Name { get; set; }= string.Empty;
     public ChatTypes Type { get; set; }
     public Guid CreatorId { get; set; }
 }

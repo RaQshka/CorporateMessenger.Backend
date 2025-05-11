@@ -1,11 +1,9 @@
-﻿/*using MediatR;
-using Messenger.Application.Messages.Commands.Shared;
+﻿using MediatR;
 
-namespace Messenger.Application.Messages.Commands.SendMessage;
-
-public class SendMessageCommand : IRequest<MessageDto>
+public class SendMessageCommand : IRequest<Guid>
 {
     public Guid ChatId { get; set; }
     public Guid SenderId { get; set; }
-    public string Content { get; set; } = string.Empty;
-}*/
+    public string Content { get; set; }
+    public Guid? ReplyToMessageId { get; set; }
+}

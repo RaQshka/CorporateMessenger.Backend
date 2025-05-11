@@ -1,9 +1,11 @@
 ﻿using MediatR;
 using Messenger.Application.Attributes;
 using Messenger.Application.Interfaces;
+using Messenger.Application.Interfaces.Services;
 using Messenger.Application.Users.Commands.AssignRole;
 using Messenger.Application.Users.Commands.ConfirmAccount;
 using Messenger.Application.Users.Commands.ConfirmEmail;
+using Messenger.Application.Users.Commands.DeleteUser;
 using Messenger.Application.Users.Commands.LoginUser;
 using Messenger.Application.Users.Commands.LogoutUser;
 using Messenger.Application.Users.Commands.RefreshToken;
@@ -163,6 +165,16 @@ public class AuthController:BaseController
             return Unauthorized(new { message = result.Message });
         
         return Ok(new { message = result.Message });
+    }    
+    
+    [Authorize(Roles = "Admin")]
+    [HttpDelete("delete-user")]
+    public async Task<IActionResult> DeleteUser(DeleteUserCommand command)
+    {
+        var result = await _mediator.Send(command);
+        await _auditLogger.LogAsync(command.UserId, "DeleteUser", "User", command.UserId, "Пользователь был удален администратором.");
+
+        return Ok();
     }
 
     /// <summary>

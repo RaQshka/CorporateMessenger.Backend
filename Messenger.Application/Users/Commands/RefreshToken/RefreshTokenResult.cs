@@ -3,7 +3,7 @@
 public class RefreshTokenResult
 {
     public bool Success { get; set; }
-    public string AccessToken { get; set; }
-    public string Message { get; set; }
+    public string AccessToken { get; set; } = string.Empty;
+    public string Message { get; set; } = string.Empty;
 
 }

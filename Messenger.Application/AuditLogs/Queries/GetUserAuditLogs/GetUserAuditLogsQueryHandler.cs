@@ -19,7 +19,7 @@ public class GetUserAuditLogsQueryHandler : IRequestHandler<GetUserAuditLogsQuer
 
     public async Task<List<AuditLogDto>> Handle(GetUserAuditLogsQuery request, CancellationToken cancellationToken)
     {
-        if(request.UserId == null) return new List<AuditLogDto>();
+        if(string.IsNullOrEmpty(request.UserId.ToString())) return new List<AuditLogDto>();
         
         var endDate = request.EndDate ?? DateTime.UtcNow;
         var startDate = request.StartTime ?? endDate.AddDays(-(request.Days ?? 30));

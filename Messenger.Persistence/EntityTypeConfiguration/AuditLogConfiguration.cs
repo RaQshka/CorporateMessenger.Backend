@@ -11,6 +11,9 @@ public class AuditLogConfiguration : IEntityTypeConfiguration<AuditLog>
     {
         builder.HasKey(a => a.LogId);
         builder.Property(a => a.ActionType).IsRequired().HasMaxLength(100);
-        builder.HasOne(a => a.User).WithMany().HasForeignKey(a => a.UserId);
+        builder.HasOne(a => a.User).WithMany().HasForeignKey(a => a.UserId).OnDelete(DeleteBehavior.Restrict);
     }
 }
+
+
+

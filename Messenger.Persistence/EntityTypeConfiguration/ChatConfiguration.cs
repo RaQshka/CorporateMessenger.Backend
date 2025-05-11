@@ -34,7 +34,7 @@ public class ChatConfiguration : IEntityTypeConfiguration<Chat>
         // Связь Chat -> Documents с каскадным удалением
         builder.HasMany(c => c.Documents)
             .WithOne(d => d.Chat)
-            .HasForeignKey(d => d.ChatID)
+            .HasForeignKey(d => d.ChatId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

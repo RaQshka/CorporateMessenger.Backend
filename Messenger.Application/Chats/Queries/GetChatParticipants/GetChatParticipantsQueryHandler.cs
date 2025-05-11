@@ -3,6 +3,7 @@ using MediatR;
 using Messenger.Application.Chats.Queries.Shared;
 using Messenger.Application.Common.Exceptions;
 using Messenger.Application.Interfaces;
+using Messenger.Application.Interfaces.Services;
 using Messenger.Domain.Entities;
 using Messenger.Domain.Enums;
 using Microsoft.AspNetCore.Identity;

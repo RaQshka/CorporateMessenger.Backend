@@ -1,5 +1,7 @@
 ﻿using Messenger.Application.Common.Exceptions;
 using Messenger.Application.Interfaces;
+using Messenger.Application.Interfaces.Repositories;
+using Messenger.Application.Interfaces.Services;
 using Messenger.Domain.Entities;
 using Messenger.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
@@ -34,6 +36,13 @@ public class ChatParticipantService : IChatParticipantService
         if (exists)
             throw new BusinessRuleException("Пользователь уже является участником чата");
 
+        var chatParticipants = await _chatParticipantRepository.ListByChatAsync(chatId, ct);
+        
+        if (chat.ChatType == (int)ChatTypes.Dialog && chatParticipants.Count >=2)
+        {
+            throw new BusinessRuleException("В диалог нельзя добавить суммарно больше двух человек");
+        }
+        
         var entity = new ChatParticipant
         {
             ChatId = chatId,

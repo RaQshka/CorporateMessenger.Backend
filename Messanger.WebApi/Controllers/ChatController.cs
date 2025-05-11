@@ -8,10 +8,12 @@ using Messenger.Application.Chats.Commands.RenameChat;
 using Messenger.Application.Chats.Commands.RevokeChatAccess;
 using Messenger.Application.Chats.Commands.SetChatAdmin;
 using Messenger.Application.Chats.Queries.GetChatAccessRules;
+using Messenger.Application.Chats.Queries.GetChatActivity;
 using Messenger.Application.Chats.Queries.GetChatInfo;
 using Messenger.Application.Chats.Queries.GetChatParticipants;
 using Messenger.Application.Chats.Queries.GetUserChats;
 using Messenger.Application.Interfaces;
+using Messenger.Application.Interfaces.Services;
 using Messenger.Domain.Enums;
 using Messenger.WebApi.Models.ChatDtos;
 using Microsoft.AspNetCore.Authorization;
@@ -270,4 +272,22 @@ public class ChatsController : BaseController
             "Правила доступа чата успешно получены");
         return Ok(result);
     }
+    
+    [HttpGet("{chatId}/activity")]
+    public async Task<IActionResult> GetChatActivity(Guid chatId, [FromQuery] int skip = 0, [FromQuery] int take = 50)
+    {
+        var query = new GetChatActivityQuery
+        {
+            ChatId = chatId,
+            UserId = UserId,
+            Skip = skip,
+            Take = take
+        };
+        var result = await _mediator.Send(query);
+        await _auditLogger.LogAsync(UserId, "GetChatActivity", "Chat", chatId, "Активность чата получена");
+        return Ok(result);
+    }
+    
+    
+    
 }

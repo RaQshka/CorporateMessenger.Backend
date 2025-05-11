@@ -1,5 +1,7 @@
 ﻿using Messenger.Application.Common.Exceptions;
 using Messenger.Application.Interfaces;
+using Messenger.Application.Interfaces.Repositories;
+using Messenger.Application.Interfaces.Services;
 using Messenger.Domain;
 using Messenger.Domain.Entities;
 using Messenger.Domain.Enums;
@@ -42,7 +44,7 @@ public class ChatService : IChatService
         {
             Id = Guid.NewGuid(),
             ChatName = name,
-            ChatType = type.ToString(),
+            ChatType = (int)type,
             CreatedBy = creatorId,
             CreatedAt = DateTime.UtcNow
         };

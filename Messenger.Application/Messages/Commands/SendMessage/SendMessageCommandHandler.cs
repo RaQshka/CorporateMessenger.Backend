@@ -1,44 +1,22 @@
-﻿/*using AutoMapper;
-using MediatR;
-using Messenger.Application.Interfaces;
-using Messenger.Application.Messages.Commands.Shared;
-using Messenger.Domain.Entities;
+﻿using MediatR;
+using Messenger.Application.Interfaces.Services;
 
-namespace Messenger.Application.Messages.Commands.SendMessage;
-
-public class SendMessageCommandHandler : IRequestHandler<SendMessageCommand, MessageDto>
+public class SendMessageCommandHandler : IRequestHandler<SendMessageCommand, Guid>
 {
-    private readonly IMessageRepository _messageRepository;
-    private readonly IMapper _mapper;
-    private readonly IUserAccessService _userAccessService; // Сервис для проверки прав отправки
+    private readonly IMessageService _messageService;
 
-    public SendMessageCommandHandler(IMessageRepository messageRepository, IMapper mapper, IUserAccessService userAccessService)
+    public SendMessageCommandHandler(IMessageService messageService)
     {
-        _messageRepository = messageRepository;
-        _mapper = mapper;
-        _userAccessService = userAccessService;
+        _messageService = messageService;
     }
 
-    public async Task<MessageDto> Handle(SendMessageCommand request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(SendMessageCommand request, CancellationToken cancellationToken)
     {
-        // Проверка прав отправки сообщения для данного чата
-        var canSend = await _userAccessService.CanSendMessageAsync(request.ChatId, request.SenderId);
-        if (!canSend)
-        {
-            throw new UnauthorizedAccessException("У вас нет прав отправлять сообщения в этот чат.");
-        }
-
-        var message = new Message
-        {
-            Id = Guid.NewGuid(),
-            ChatId = request.ChatId,
-            SenderId = request.SenderId,
-            Content = request.Content,
-            SentAt = DateTime.UtcNow,
-            IsDeleted = false
-        };
-
-        var createdMessage = await _messageRepository.SendMessageAsync(message, cancellationToken);
-        return _mapper.Map<MessageDto>(createdMessage);
+        return await _messageService.SendAsync(
+            request.ChatId,
+            request.SenderId,
+            request.Content,
+            request.ReplyToMessageId,
+            cancellationToken);
     }
-}*/
+}
