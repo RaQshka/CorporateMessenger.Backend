@@ -14,6 +14,7 @@ using Messenger.Application.Users.Commands.RemoveRole;
 using Messenger.Application.Users.Queries.GetUnconfirmedUsers;
 using Messenger.Application.Users.Queries.GetUserInfo;
 using Messenger.Application.Users.Queries.GetUsers;
+using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,12 +27,22 @@ public class AuthController:BaseController
 {
     private readonly IMediator _mediator;
     private readonly IAuditLogger _auditLogger;
+
     public AuthController(IMediator mediator, IAuditLogger auditLogger)
     {
         _mediator = mediator;
         _auditLogger = auditLogger;
     }
 
+    /*
+    [HttpGet("csrf")]
+    [Authorize] // Требуется аутентификация
+    public IActionResult GetCsrfToken()
+    {
+        var token = _antiforgery.GetAndStoreTokens(HttpContext);
+        return Ok(new { csrfToken = token.RequestToken });
+    }*/
+    
     /// <summary>
     /// Регистрация нового пользователя
     /// </summary>

@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Messenger.Application.Users.Commands.DeleteUser;
-
 public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, Unit>
 {
     private readonly UserManager<User> _userManager;
@@ -21,22 +20,43 @@ public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, Unit>
     public async Task<Unit> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
     {
         var user = await _userManager.FindByIdAsync(request.UserId.ToString())
-                   ?? throw new NotFoundException("User", request.UserId);
+                   ?? throw new NotFoundException("Пользователь", request.UserId);
 
-        // Remove associated ChatParticipants
+        // Удаление ChatParticipants
         var participants = await _context.ChatParticipants
             .Where(cp => cp.UserId == request.UserId)
             .ToListAsync(cancellationToken);
         _context.ChatParticipants.RemoveRange(participants);
 
-        // Save changes to remove ChatParticipants
+        // Удаление Documents
+        var documents = await _context.Documents
+            .Where(d => d.UploaderId == request.UserId)
+            .ToListAsync(cancellationToken);
+        _context.Documents.RemoveRange(documents); // DocumentAccessRules удалятся каскадно
+
+        // Удаление MessageReactions
+        var reactions = await _context.MessageReactions
+            .Where(r => r.UserId == request.UserId)
+            .ToListAsync(cancellationToken);
+        _context.MessageReactions.RemoveRange(reactions);
+
+        // Пометка сообщений как удаленных
+        var messages = await _context.Messages
+            .Where(m => m.SenderId == request.UserId)
+            .ToListAsync(cancellationToken);
+        foreach (var message in messages)
+        {
+            message.IsDeleted = true;
+        }
+
+        // Сохранение изменений
         await _context.SaveChangesAsync(cancellationToken);
 
-        // Delete the user
+        // Удаление пользователя
         var result = await _userManager.DeleteAsync(user);
         if (!result.Succeeded)
         {
-            throw new BusinessRuleException("Failed to delete user: " + string.Join(", ", result.Errors.Select(e => e.Description)));
+            throw new BusinessRuleException("Не удалось удалить пользователя: " + string.Join(", ", result.Errors.Select(e => e.Description)));
         }
 
         return Unit.Value;

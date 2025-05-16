@@ -1,5 +1,6 @@
 ﻿namespace Messenger.Domain.Enums;
 
+[Flags]
 public enum DocumentAccess
 {
     ViewDocument = 1,

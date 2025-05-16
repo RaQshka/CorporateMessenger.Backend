@@ -10,6 +10,7 @@ public interface IMessengerDbContext
     DbSet<Chat> Chats { get; set; }
     DbSet<ChatParticipant> ChatParticipants { get; set; }
     DbSet<Message> Messages { get; set; }
+    DbSet<MessageReaction> MessageReactions { get; set; }
     DbSet<Document> Documents { get; set; }
     DbSet<AuditLog> AuditLogs { get; set; }
     DbSet<Role> Roles { get; set; }

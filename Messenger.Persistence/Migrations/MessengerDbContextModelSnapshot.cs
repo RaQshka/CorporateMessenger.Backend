@@ -540,7 +540,7 @@ namespace Messenger.Persistence.Migrations
                     b.HasOne("Messenger.Domain.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("CreatedBy")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -574,7 +574,7 @@ namespace Messenger.Persistence.Migrations
                     b.HasOne("Messenger.Domain.Entities.User", "User")
                         .WithMany("ChatParticipants")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Chat");
@@ -593,7 +593,7 @@ namespace Messenger.Persistence.Migrations
                     b.HasOne("Messenger.Domain.Entities.Message", "Message")
                         .WithMany()
                         .HasForeignKey("MessageId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Messenger.Domain.Entities.User", "Uploader")
                         .WithMany("Documents")

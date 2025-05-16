@@ -12,19 +12,13 @@ public class SetChatAdminCommandHandler : IRequestHandler<SetChatAdminCommand, U
 {
     private readonly IChatParticipantService _participantService;
     private readonly IChatAccessService _accessService;
-    private readonly IChatService _chatService;
-    private readonly UserManager<User> _userManager;
 
     public SetChatAdminCommandHandler(
         IChatParticipantService participantService,
-        IChatAccessService accessService,
-        IChatService chatService,
-        UserManager<User> userManager)
+        IChatAccessService accessService)
     {
         _participantService = participantService;
         _accessService = accessService;
-        _chatService = chatService;
-        _userManager = userManager;
     }
 
     public async Task<Unit> Handle(SetChatAdminCommand request, CancellationToken cancellationToken)

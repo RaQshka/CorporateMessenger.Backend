@@ -3,7 +3,6 @@ using Messenger.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Messenger.Persistence.Repositories;
-
 public class DocumentAccessRepository : IDocumentAccessRepository
 {
     private readonly MessengerDbContext _context;
@@ -19,15 +18,26 @@ public class DocumentAccessRepository : IDocumentAccessRepository
         await _context.SaveChangesAsync(ct);
     }
 
-    public async Task<DocumentAccessRule> GetRuleAsync(Guid documentId, Guid roleId, CancellationToken ct)
+    public async Task<DocumentAccessRule?> GetRuleAsync(Guid documentId, Guid roleId, CancellationToken ct)
     {
         return await _context.DocumentAccessRules
             .FirstOrDefaultAsync(r => r.DocumentId == documentId && r.RoleId == roleId, ct);
     }
 
+    public async Task<DocumentAccessRule?> GetRuleAsync(Guid documentId, string roleName, CancellationToken ct)
+    {
+        var role = await _context.Roles.FirstOrDefaultAsync(r => r.Name == roleName, ct);
+        if (role == null)
+            throw new ArgumentException($"Роль {roleName} не найдена");
+
+        return await _context.DocumentAccessRules
+            .FirstOrDefaultAsync(r => r.DocumentId == documentId && r.RoleId == role.Id, ct);
+    }
+
     public async Task<IReadOnlyList<DocumentAccessRule>> GetRulesByDocumentAsync(Guid documentId, CancellationToken ct)
     {
         return await _context.DocumentAccessRules
+            .Include(r => r.Role)
             .Where(r => r.DocumentId == documentId)
             .ToListAsync(ct);
     }

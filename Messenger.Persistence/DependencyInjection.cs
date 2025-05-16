@@ -57,8 +57,8 @@ public static class DependencyInjection
         
         services.AddScoped<IMessageService, MessageService>();
         services.AddScoped<IReactionService, ReactionService>();
-        services.AddScoped<IDocumentRepository, DocumentRepository>();
-        services.AddScoped<IDocumentAccessRepository, DocumentAccessRepository>();
+        services.AddScoped<IDocumentService,DocumentService>();
+        services.AddScoped<IDocumentAccessService, DocumentAccessService>();
 
 
         return services;

@@ -16,6 +16,7 @@ public class RevokeDocumentAccessCommandHandler : IRequestHandler<RevokeDocument
     {
         await _documentAccessService.RevokeAccessAsync(
             request.DocumentId,
+            request.InitiatorId,
             request.RoleId,
             request.AccessFlag,
             cancellationToken);

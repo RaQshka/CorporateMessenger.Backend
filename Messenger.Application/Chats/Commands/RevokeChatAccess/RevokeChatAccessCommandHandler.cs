@@ -11,20 +11,11 @@ namespace Messenger.Application.Chats.Commands.RevokeChatAccess;
 public class RevokeChatAccessCommandHandler : IRequestHandler<RevokeChatAccessCommand, Unit>
 {
     private readonly IChatAccessService _accessService;
-    private readonly IChatService _chatService;
-    private readonly UserManager<User> _userManager;
-    private readonly RoleManager<Role> _roleManager;
 
     public RevokeChatAccessCommandHandler(
-        IChatAccessService accessService,
-        IChatService chatService,
-        UserManager<User> userManager,
-        RoleManager<Role> roleManager)
+        IChatAccessService accessService)
     {
         _accessService = accessService;
-        _chatService = chatService;
-        _userManager = userManager;
-        _roleManager = roleManager;
     }
 
     public async Task<Unit> Handle(RevokeChatAccessCommand request, CancellationToken cancellationToken)

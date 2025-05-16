@@ -11,27 +11,24 @@ public class ChatConfiguration : IEntityTypeConfiguration<Chat>
     {
         builder.HasKey(c => c.Id);
         builder.Property(c => c.ChatName).IsRequired().HasMaxLength(200);
-        builder.HasOne<User>().WithMany().HasForeignKey(c => c.CreatedBy);
+        builder.HasOne<User>().WithMany().HasForeignKey(c => c.CreatedBy)
+            .OnDelete(DeleteBehavior.Restrict); // Явно указываем RESTRICT для ясности
 
-        // Связь Chat -> ChatParticipants с каскадным удалением
         builder.HasMany(c => c.ChatParticipants)
             .WithOne(cp => cp.Chat)
             .HasForeignKey(cp => cp.ChatId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        // Связь Chat -> ChatAccessRules с каскадным удалением
         builder.HasMany(c => c.ChatAccessRules)
             .WithOne(car => car.Chat)
             .HasForeignKey(car => car.ChatId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        // Связь Chat -> Messages с каскадным удалением
         builder.HasMany(c => c.Messages)
             .WithOne(m => m.Chat)
             .HasForeignKey(m => m.ChatId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        // Связь Chat -> Documents с каскадным удалением
         builder.HasMany(c => c.Documents)
             .WithOne(d => d.Chat)
             .HasForeignKey(d => d.ChatId)

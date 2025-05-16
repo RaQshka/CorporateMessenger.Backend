@@ -12,6 +12,7 @@ using Messenger.Application.Users.Commands.LogoutUser;
 using Messenger.Application.Users.Commands.RefreshToken;
 using Messenger.Application.Users.Commands.RegisterUser;
 using Messenger.WebApi.Controllers;
+using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -23,6 +24,7 @@ namespace Messenger.Tests.Controllers
     {
         private readonly Mock<IMediator> _mediatorMock;
         private readonly Mock<IAuditLogger> _auditMock;
+        private readonly Mock<IAntiforgery> _antiforgeryMock;
         private readonly AuthController _controller;
 
         public AuthControllerTests()

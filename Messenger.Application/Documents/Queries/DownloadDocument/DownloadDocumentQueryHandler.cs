@@ -22,6 +22,11 @@ public class DownloadDocumentQueryHandler : IRequestHandler<DownloadDocumentQuer
             request.DocumentId,
             request.UserId,
             cancellationToken);
-        return _mapper.Map<DocumentDownloadDto>(result);
+        return new DocumentDownloadDto()
+        {
+            ContentType = result.ContentType,
+            Content = result.Content,
+            FileName = result.FileName,
+        };
     }
 }

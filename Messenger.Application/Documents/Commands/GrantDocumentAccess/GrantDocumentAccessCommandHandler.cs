@@ -16,6 +16,7 @@ public class GrantDocumentAccessCommandHandler : IRequestHandler<GrantDocumentAc
     {
         await _documentAccessService.GrantAccessAsync(
             request.DocumentId,
+            request.InitiatorId,
             request.RoleId,
             request.AccessFlag,
             cancellationToken);

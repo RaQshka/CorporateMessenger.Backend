@@ -5,6 +5,7 @@ using Messenger.Application.Common.Mappings;
 using Messenger.Application.Interfaces;
 using Messenger.Persistence;
 using Messenger.Persistence.Migrations;
+using Messenger.WebApi.Hubs;
 using Messenger.WebApi.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
@@ -35,6 +36,10 @@ namespace Messenger.WebApi
             services.AddApplication();
             services.AddPersistance(_configuration);
             services.AddControllers();            
+            /*services.AddAntiforgery(options =>
+            {
+                options.HeaderName = "X-CSRF-TOKEN"; // Имя заголовка для токена
+            });*/
             services.AddHttpContextAccessor();
             services.AddTransient<MessengerDbContextFactory>();
             services.AddCors(options =>
@@ -67,7 +72,7 @@ namespace Messenger.WebApi
                     ClockSkew = TimeSpan.Zero // Без задержки истечения токена
                 };
             });
-
+            services.AddSignalR();
             services.AddAuthorization();
             services.AddEndpointsApiExplorer();
             
@@ -149,12 +154,17 @@ namespace Messenger.WebApi
 
             app.UseCustomExceptionBuilder();*/
             app.UseRouting();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapHub<ChatHub>("/chatHub");
+            });
 
             app.UseHttpsRedirection();
             app.UseCors("AllowAll");
             
             app.UseAuthentication();
             app.UseAuthorization();
+            
             app.UseMiddleware<AuditMiddleware>();
             app.UseMiddleware<ExceptionHandlingMiddleware>();
             app.UseEndpoints(e => e.MapControllers());

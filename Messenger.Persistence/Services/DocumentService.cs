@@ -5,34 +5,39 @@ using Messenger.Application.Interfaces.Services;
 using Messenger.Domain.Entities;
 using Messenger.Domain.Enums;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 
 namespace Messenger.Persistence.Services;
-
 public class DocumentService : IDocumentService
 {
     private readonly IDocumentRepository _documentRepository;
+    private readonly IDocumentAccessRepository _documentAccessRepository;
     private readonly IChatRepository _chatRepository;
     private readonly IChatAccessService _chatAccessService;
     private readonly IChatParticipantService _chatParticipantService;
     private readonly IDocumentAccessService _documentAccessService;
+    private readonly RoleManager<Role> _roleManager;
     private readonly string _uploadPath;
 
     public DocumentService(
         IDocumentRepository documentRepository,
+        IDocumentAccessRepository documentAccessRepository,
         IChatRepository chatRepository,
         IChatAccessService chatAccessService,
         IChatParticipantService chatParticipantService,
-        IDocumentAccessService documentAccessService)
+        IDocumentAccessService documentAccessService,
+        RoleManager<Role> roleManager)
     {
         _documentRepository = documentRepository;
+        _documentAccessRepository = documentAccessRepository;
         _chatRepository = chatRepository;
         _chatAccessService = chatAccessService;
         _chatParticipantService = chatParticipantService;
         _documentAccessService = documentAccessService;
+        _roleManager = roleManager;
         _uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "Uploads");
         Directory.CreateDirectory(_uploadPath);
     }
-
     public async Task<Guid> UploadAsync(Guid chatId, Guid uploaderId, IFormFile file, CancellationToken ct)
     {
         var chat = await _chatRepository.GetByIdAsync(chatId, ct)
@@ -84,11 +89,23 @@ public class DocumentService : IDocumentService
         };
 
         await _documentRepository.AddAsync(document, ct);
+
+        // Создаем базовые правила доступа для всех ролей
+        var roles = _roleManager.Roles.ToList();
+        foreach (var role in roles)
+        {
+            await _documentAccessRepository.AddRuleAsync(new DocumentAccessRule
+            {
+                Id = Guid.NewGuid(),
+                DocumentId = document.Id,
+                RoleId = role.Id,
+                DocumentAccessMask = (int)(DocumentAccess.ViewDocument | DocumentAccess.DownloadDocument)
+            }, ct);
+        }
+
         return document.Id;
     }
-
-    public async Task<(byte[] Content, string FileName, string ContentType)> DownloadAsync(Guid documentId, Guid userId,
-        CancellationToken ct)
+    public async Task<(byte[] Content, string FileName, string ContentType)> DownloadAsync(Guid documentId, Guid userId, CancellationToken ct)
     {
         var document = await _documentRepository.GetByIdAsync(documentId, ct)
                        ?? throw new NotFoundException("Документ", documentId);
@@ -106,14 +123,12 @@ public class DocumentService : IDocumentService
             throw new BusinessRuleException($"Ошибка при чтении файла: {ex.Message}");
         }
     }
-
     public async Task DeleteAsync(Guid documentId, Guid userId, CancellationToken ct)
     {
         var document = await _documentRepository.GetByIdAsync(documentId, ct)
                        ?? throw new NotFoundException("Документ", documentId);
-
-        var isAdmin = await _chatAccessService.IsAdminOfChat(document.ChatId, userId, ct);
-        if (document.UploaderId != userId && !isAdmin)
+        
+        if (!await _documentAccessService.HasAccessAsync(documentId, userId, DocumentAccess.DeleteDocument, ct))
             throw new AccessDeniedException("Удаление документа", document.ChatId, userId);
 
         try
@@ -128,7 +143,6 @@ public class DocumentService : IDocumentService
 
         await _documentRepository.DeleteAsync(documentId, ct);
     }
-
     public async Task<IReadOnlyList<Document>> GetListByChatAsync(Guid chatId, Guid userId, CancellationToken ct)
     {
         var chat = await _chatRepository.GetByIdAsync(chatId, ct)
@@ -149,12 +163,11 @@ public class DocumentService : IDocumentService
 
         return accessibleDocuments.AsReadOnly();
     }
-
     public async Task<Document?> GetByIdAsync(Guid documentId, Guid userId, CancellationToken ct)
     {
         var document = await _documentRepository.GetByIdAsync(documentId, ct)
                        ?? throw new NotFoundException("Документ", documentId);
-        
+
         var chat = document.Chat ?? throw new NotFoundException("Чат", document.ChatId);
 
         if (!await _chatAccessService.HasAccessAsync(chat.Id, userId, ChatAccess.ReadMessages, ct))
@@ -164,9 +177,9 @@ public class DocumentService : IDocumentService
 
         if (await _documentAccessService.HasAccessAsync(document.Id, userId, DocumentAccess.ViewDocument, ct))
         {
-            return document; // Возвращаем первый доступный документ
+            return document;
         }
-        
-        return null; // Если нет доступных документов
+
+        return null;
     }
 }

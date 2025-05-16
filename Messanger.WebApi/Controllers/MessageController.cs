@@ -1,95 +1,139 @@
 ﻿using MediatR;
-using Messenger.Application.Interfaces.Services;
 using Messenger.Application.Messages.Commands.AddReaction;
 using Messenger.Application.Messages.Commands.DeleteMessage;
 using Messenger.Application.Messages.Commands.EditMessage;
 using Messenger.Application.Messages.Commands.RemoveReaction;
 using Messenger.Application.Messages.Queries.GetMessages;
 using Messenger.Application.Messages.Queries.GetReactions;
+using Messenger.Application.Interfaces.Services;
+using Messenger.Domain.Enums;
+using Messenger.WebApi.Models.MessageDtos.Messenger.Application.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Messenger.WebApi.Controllers;
-
 [ApiController]
 [Route("api/messages")]
 [Authorize]
-public class MessagesController : ControllerBase
+public class MessagesController : BaseController
 {
-    private readonly IMediator _mediator;
     private readonly IAuditLogger _auditLogger;
 
-    public MessagesController(IMediator mediator, IAuditLogger auditLogger)
+    public MessagesController(IAuditLogger auditLogger)
     {
-        _mediator = mediator;
         _auditLogger = auditLogger;
     }
 
+    // Отправляет новое сообщение в чат
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public async Task<IActionResult> SendMessage([FromBody] SendMessageCommand command)
     {
-        var messageId = await _mediator.Send(command);
-        await _auditLogger.LogAsync(command.SenderId, "SendMessage", "Message", messageId, "Сообщение отправлено");
+        command.SenderId = UserId;
+        var messageId = await Mediator.Send(command);
+        await _auditLogger.LogAsync(UserId, "Отправка сообщения", "Сообщение", messageId, "Сообщение отправлено");
         return Ok(new { MessageId = messageId });
     }
 
+    // Редактирует существующее сообщение
     [HttpPut("{messageId}")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> EditMessage(Guid messageId, [FromBody] EditMessageCommand command)
+    public async Task<IActionResult> EditMessage(Guid messageId, [FromBody] EditMessageRequest request)
     {
-        if (command.MessageId != messageId) return BadRequest("Message ID mismatch");
-        await _mediator.Send(command);
-        await _auditLogger.LogAsync(command.UserId, "EditMessage", "Message", messageId, "Сообщение отредактировано");
+        var command = new EditMessageCommand
+        {
+            MessageId = messageId,
+            UserId = UserId,
+            NewContent = request.NewContent
+        };
+        await Mediator.Send(command);
+        await _auditLogger.LogAsync(UserId, "Редактирование сообщения", "Сообщение", messageId, "Сообщение отредактировано");
         return NoContent();
     }
 
+    // Удаляет сообщение
     [HttpDelete("{messageId}")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteMessage(Guid messageId, [FromQuery] Guid userId)
+    public async Task<IActionResult> DeleteMessage(Guid messageId)
     {
-        var command = new DeleteMessageCommand { MessageId = messageId, UserId = userId };
-        await _mediator.Send(command);
-        await _auditLogger.LogAsync(userId, "DeleteMessage", "Message", messageId, "Сообщение удалено");
+        var command = new DeleteMessageCommand
+        {
+            MessageId = messageId,
+            UserId = UserId
+        };
+        await Mediator.Send(command);
+        await _auditLogger.LogAsync(UserId, "Удаление сообщения", "Сообщение", messageId, "Сообщение удалено");
         return NoContent();
     }
 
+    // Добавляет реакцию к сообщению
     [HttpPost("{messageId}/reactions")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> AddReaction(Guid messageId, [FromBody] AddReactionCommand command)
+    public async Task<IActionResult> AddReaction(Guid messageId, [FromBody] AddReactionRequest request)
     {
-        if (command.MessageId != messageId) return BadRequest("Message ID mismatch");
-        await _mediator.Send(command);
-        await _auditLogger.LogAsync(command.UserId, "AddReaction", "Reaction", messageId, "Реакция добавлена");
+        if (!ReactionType.TryParse(request.ReactionType, out ReactionType reactionType))
+            return NotFound();
+        
+        var command = new AddReactionCommand
+        {
+            MessageId = messageId,
+            UserId = UserId,
+            ReactionType = reactionType
+        };
+        
+        await Mediator.Send(command);
+        await _auditLogger.LogAsync(UserId, "Добавление реакции", "Реакция", messageId, "Реакция добавлена");
         return NoContent();
     }
 
+    // Удаляет реакцию с сообщения
     [HttpDelete("{messageId}/reactions")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> RemoveReaction(Guid messageId, [FromQuery] Guid userId)
+    public async Task<IActionResult> RemoveReaction(Guid messageId)
     {
-        var command = new RemoveReactionCommand { MessageId = messageId, UserId = userId };
-        await _mediator.Send(command);
-        await _auditLogger.LogAsync(userId, "RemoveReaction", "Reaction", messageId, "Реакция удалена");
+        var command = new RemoveReactionCommand
+        {
+            MessageId = messageId,
+            UserId = UserId
+        };
+        await Mediator.Send(command);
+        await _auditLogger.LogAsync(UserId, "Удаление реакции", "Реакция", messageId, "Реакция удалена");
         return NoContent();
     }
 
+    // Получает список сообщений в чате с пагинацией
     [HttpGet("chat/{chatId}")]
-    public async Task<IActionResult> GetMessages(Guid chatId, [FromQuery] Guid userId, [FromQuery] int skip = 0,
-        [FromQuery] int take = 20)
+    public async Task<IActionResult> GetMessages(Guid chatId, [FromQuery] int skip = 0, [FromQuery] int take = 20)
     {
-        var query = new GetMessagesQuery { ChatId = chatId, UserId = userId, Skip = skip, Take = take };
-        var messages = await _mediator.Send(query);
-        await _auditLogger.LogAsync(userId, "GetMessages", "Chat", chatId, "Сообщения получены");
+        var query = new GetMessagesQuery
+        {
+            ChatId = chatId,
+            UserId = UserId,
+            Skip = skip,
+            Take = take
+        };
+        var messages = await Mediator.Send(query);
+        await _auditLogger.LogAsync(UserId, "Получение сообщений", "Чат", chatId, "Сообщения получены");
         return Ok(messages);
     }
 
+    // Получает список реакций на сообщение
     [HttpGet("{messageId}/reactions")]
-    public async Task<IActionResult> GetReactions(Guid messageId, [FromQuery] Guid userId)
+    public async Task<IActionResult> GetReactions(Guid messageId)
     {
-        var query = new GetReactionsQuery { MessageId = messageId, UserId = userId };
-        var reactions = await _mediator.Send(query);
-        await _auditLogger.LogAsync(userId, "GetReactions", "Message", messageId, "Реакции получены");
+        var query = new GetReactionsQuery
+        {
+            MessageId = messageId,
+            UserId = UserId
+        };
+        var reactions = await Mediator.Send(query);
+        await _auditLogger.LogAsync(UserId, "Получение реакций", "Сообщение", messageId, "Реакции получены");
         return Ok(reactions);
     }
+}
+
+// DTO для минимизации передаваемых данных
+public class EditMessageRequest
+{
+    public string NewContent { get; set; }
+}
+
+public class AddReactionRequest
+{
+    public string ReactionType { get; set; }
 }
