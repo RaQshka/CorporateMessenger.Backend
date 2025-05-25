@@ -1,4 +1,5 @@
 ﻿using MediatR;
+namespace Messenger.Application.Messages.Commands.SendMessage;
 
 public class SendMessageCommand : IRequest<Guid>
 {

@@ -201,3 +201,4 @@ C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messang
 C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messanger.WebApi\bin\Debug\net8.0\Microsoft.Extensions.Localization.Abstractions.dll
 C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messanger.WebApi\bin\Debug\net8.0\Newtonsoft.Json.dll
 C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messanger.WebApi\bin\Debug\net8.0\Newtonsoft.Json.Bson.dll
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messanger.WebApi\bin\Debug\net8.0\System.Net.WebSockets.WebSocketProtocol.dll

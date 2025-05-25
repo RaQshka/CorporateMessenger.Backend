@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+namespace Messenger.Application.Messages.Commands.SendMessage;
 
 public class SendMessageCommandValidator : AbstractValidator<SendMessageCommand>
 {

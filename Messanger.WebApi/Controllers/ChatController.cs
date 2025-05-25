@@ -24,12 +24,12 @@ namespace Messenger.WebApi.Controllers;
 [ApiController]
 [Route("api/chats")]
 [Authorize] // Требуется аутентификация для всех эндпоинтов
-public class ChatsController : BaseController
+public class ChatController : BaseController
 {
     private readonly IMediator _mediator;
     private readonly IAuditLogger _auditLogger;
 
-    public ChatsController(IMediator mediator, IAuditLogger auditLogger)
+    public ChatController(IMediator mediator, IAuditLogger auditLogger)
     {
         _mediator = mediator;
         _auditLogger = auditLogger;

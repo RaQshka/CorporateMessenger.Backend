@@ -20,7 +20,7 @@ public class AuditLogger:IAuditLogger
     }
 
     public async Task LogAsync(Guid userId, string actionType, string targetEntity, Guid targetId,
-        string description, string ipAddress, string userAgent, LogLevel logLevel)
+        string description, string ipAddress, string userAgent, LogLevel logLevel  = LogLevel.Info)
     {
         if (userId == Guid.Empty)
         {

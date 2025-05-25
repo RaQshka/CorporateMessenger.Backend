@@ -1,6 +1,9 @@
 ﻿using MediatR;
 using Messenger.Application.Interfaces.Services;
 
+
+namespace Messenger.Application.Messages.Commands.SendMessage;
+
 public class SendMessageCommandHandler : IRequestHandler<SendMessageCommand, Guid>
 {
     private readonly IMessageService _messageService;

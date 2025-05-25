@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Messenger.Application.Messages.Commands.SendMessage;
 using Microsoft.AspNetCore.SignalR;
 
 namespace Messenger.WebApi.Hubs;

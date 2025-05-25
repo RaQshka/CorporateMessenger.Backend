@@ -34,15 +34,6 @@ public class AuthController:BaseController
         _auditLogger = auditLogger;
     }
 
-    /*
-    [HttpGet("csrf")]
-    [Authorize] // Требуется аутентификация
-    public IActionResult GetCsrfToken()
-    {
-        var token = _antiforgery.GetAndStoreTokens(HttpContext);
-        return Ok(new { csrfToken = token.RequestToken });
-    }*/
-    
     /// <summary>
     /// Регистрация нового пользователя
     /// </summary>

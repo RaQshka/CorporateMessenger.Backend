@@ -6,6 +6,7 @@ using Messenger.Application.Messages.Commands.RemoveReaction;
 using Messenger.Application.Messages.Queries.GetMessages;
 using Messenger.Application.Messages.Queries.GetReactions;
 using Messenger.Application.Interfaces.Services;
+using Messenger.Application.Messages.Commands.SendMessage;
 using Messenger.Domain.Enums;
 using Messenger.WebApi.Models.MessageDtos.Messenger.Application.DTOs;
 using Microsoft.AspNetCore.Authorization;

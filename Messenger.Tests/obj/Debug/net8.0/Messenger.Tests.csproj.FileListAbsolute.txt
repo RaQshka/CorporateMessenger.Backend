@@ -205,8 +205,6 @@ C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messeng
 C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Tests\bin\Debug\net8.0\refs\Microsoft.Extensions.FileProviders.Physical.dll
 C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Tests\bin\Debug\net8.0\refs\Microsoft.Extensions.FileSystemGlobbing.dll
 C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Tests\bin\Debug\net8.0\refs\Microsoft.Extensions.Http.dll
-C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Tests\bin\Debug\net8.0\refs\Microsoft.Extensions.Localization.Abstractions.dll
-C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Tests\bin\Debug\net8.0\refs\Microsoft.Extensions.Localization.dll
 C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Tests\bin\Debug\net8.0\refs\Microsoft.Extensions.Logging.TraceSource.dll
 C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Tests\bin\Debug\net8.0\refs\Microsoft.Extensions.Options.ConfigurationExtensions.dll
 C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Tests\bin\Debug\net8.0\refs\Microsoft.Extensions.Options.DataAnnotations.dll
@@ -479,3 +477,8 @@ C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messeng
 C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Tests\bin\Debug\net8.0\Messenger.Persistence.pdb
 C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Tests\bin\Debug\net8.0\Messenger.Domain.pdb
 C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Tests\obj\Debug\net8.0\MvcTestingAppManifest.json
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Tests\bin\Debug\net8.0\Microsoft.AspNetCore.JsonPatch.dll
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Tests\bin\Debug\net8.0\Microsoft.Extensions.Localization.dll
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Tests\bin\Debug\net8.0\Microsoft.Extensions.Localization.Abstractions.dll
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Tests\bin\Debug\net8.0\Newtonsoft.Json.Bson.dll
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messenger.Tests\bin\Debug\net8.0\System.Net.WebSockets.WebSocketProtocol.dll

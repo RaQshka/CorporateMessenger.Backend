@@ -2,7 +2,7 @@
 
 public enum ChatTypes
 {
-    Chat,
+    Group,
     Dialog,
     Channel,
 }
