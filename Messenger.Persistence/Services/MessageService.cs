@@ -101,10 +101,17 @@ public class MessageService : IMessageService
         var message = await _messageRepository.GetByIdAsync(messageId, ct)
                       ?? throw new NotFoundException("Сообщение", messageId);
 
-        // Проверка прав на удаление (отправитель или администратор)
+        // Проверка прав на удаление (отправитель или администратор или пользователь с соотв. правами)
         var isAdmin = await _chatAccessService.IsAdminOfChat(message.ChatId, userId, ct);
+
         if (message.SenderId != userId && !isAdmin)
+        {
+            // Проверка прав на чтение сообщений
+            if (!await _chatAccessService.HasAccessAsync(message.ChatId, userId, ChatAccess.DeleteMessage, ct))
+                throw new BusinessRuleException("У пользователя нет прав на удаление чужих сообщений в этом чате");
+
             throw new BusinessRuleException("Только отправитель или администратор могут удалить сообщение");
+        }
 
         // Пометка сообщения как удалённое
         message.IsDeleted = true;

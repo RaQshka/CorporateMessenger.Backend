@@ -46,9 +46,10 @@ namespace Messenger.WebApi
             {
                 options.AddPolicy("AllowAll", policy =>
                 {
-                    policy.AllowAnyHeader();
-                    policy.AllowAnyMethod();
-                    policy.AllowAnyOrigin();
+                    policy.WithOrigins("http://localhost:5173")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials(); 
                 });
             });
             var jwtSettings = _configuration.GetSection("JwtSettings");
@@ -154,10 +155,6 @@ namespace Messenger.WebApi
 
             app.UseCustomExceptionBuilder();*/
             app.UseRouting();
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapHub<ChatHub>("/chatHub");
-            });
 
             app.UseHttpsRedirection();
             app.UseCors("AllowAll");
@@ -167,7 +164,12 @@ namespace Messenger.WebApi
             
             app.UseMiddleware<AuditMiddleware>();
             app.UseMiddleware<ExceptionHandlingMiddleware>();
-            app.UseEndpoints(e => e.MapControllers());
+            
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapHub<ChatHub>("/chatHub").RequireCors("AllowAll");
+                endpoints.MapControllers();
+            });
         }
     }
 }

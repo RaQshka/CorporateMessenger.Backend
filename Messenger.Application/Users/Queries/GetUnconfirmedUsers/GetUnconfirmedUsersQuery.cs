@@ -3,7 +3,7 @@ using Messenger.Application.Users.Queries.Shared;
 
 namespace Messenger.Application.Users.Queries.GetUnconfirmedUsers;
 
-public class GetUnconfirmedUsersQuery:IRequest<List<UserDetailsDto>>
+public class GetUnconfirmedUsersQuery:IRequest<List<UserFullDetailsDto>>
 {
     
 }

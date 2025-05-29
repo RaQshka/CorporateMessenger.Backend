@@ -11,6 +11,7 @@ using Messenger.Application.Users.Commands.LogoutUser;
 using Messenger.Application.Users.Commands.RefreshToken;
 using Messenger.Application.Users.Commands.RegisterUser;
 using Messenger.Application.Users.Commands.RemoveRole;
+using Messenger.Application.Users.Queries.GetRoles;
 using Messenger.Application.Users.Queries.GetUnconfirmedUsers;
 using Messenger.Application.Users.Queries.GetUserInfo;
 using Messenger.Application.Users.Queries.GetUsers;
@@ -77,6 +78,13 @@ public class AuthController:BaseController
         return Ok(result);
     }
 
+    [HttpGet("roles")]
+    [Authorize]
+    public async Task<IActionResult> GetRoles()
+    {
+        var result = await _mediator.Send(new GetRolesQuery());
+        return Ok(result);
+    }
     /// <summary>
     /// Выход из системы
     /// </summary>
@@ -185,6 +193,21 @@ public class AuthController:BaseController
     /// <param name="command">GetUserInfoQuery</param>
     /// <returns>UserDetailsDto</returns>
     [Authorize(Roles = "Admin")]
+    [HttpGet("full-user-info")]
+    public async Task<IActionResult> GetFullUserInfo([FromQuery]GetFullUserInfoQuery command)
+    {
+        var result = await _mediator.Send(command);
+        if (result == null)
+        {
+            return NoContent();
+        }
+        return Ok(result);
+    }
+    /// <summary>
+    /// Получить информацию о пользователе по Id
+    /// </summary>
+    /// <param name="command">GetUserInfoQuery</param>
+    /// <returns>UserDetailsDto</returns>
     [HttpGet("user-info")]
     public async Task<IActionResult> GetUserInfo([FromQuery]GetUserInfoQuery command)
     {

@@ -87,7 +87,7 @@ public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, LoginRe
         });
         response.Cookies.Append("UserId", user.Id.ToString(), new CookieOptions
         {
-            HttpOnly = true,
+            HttpOnly = false,
             Secure = true,
             SameSite = SameSiteMode.Strict,
             Expires = DateTime.UtcNow.AddDays(1)
