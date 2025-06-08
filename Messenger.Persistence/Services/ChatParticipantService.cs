@@ -55,6 +55,35 @@ public class ChatParticipantService : IChatParticipantService
     }
 
 
+    public async Task AddByEmailAsync(Guid chatId, string userEmail, bool isAdmin, CancellationToken ct)
+    {
+        var chat = await _chatRepository.GetByIdAsync(chatId, ct)
+                   ?? throw new NotFoundException("Чат", chatId);
+
+        var user = await _userManager.FindByEmailAsync(userEmail)
+                   ?? throw new NotFoundException("Пользователь", userEmail);
+
+        var exists = await _chatParticipantRepository.ExistsAsync(chatId, user.Id, ct);
+        if (exists)
+            throw new BusinessRuleException("Пользователь уже является участником чата");
+
+        var chatParticipants = await _chatParticipantRepository.ListByChatAsync(chatId, ct);
+        
+        if (chat.ChatType == (int)ChatTypes.Dialog && chatParticipants.Count >=2)
+        {
+            throw new BusinessRuleException("В диалог нельзя добавить суммарно больше двух человек");
+        }
+        
+        var entity = new ChatParticipant
+        {
+            ChatId = chatId,
+            UserId = user.Id,
+            IsAdmin = isAdmin,
+            JoinedAt = DateTime.UtcNow
+        };
+
+        await _chatParticipantRepository.AddAsync(entity, ct);
+    }
     public async Task RemoveAsync(Guid chatId, Guid userId, CancellationToken ct)
     {
         var chat = await _chatRepository.GetByIdAsync(chatId, ct)

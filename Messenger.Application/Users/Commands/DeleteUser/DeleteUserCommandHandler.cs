@@ -39,6 +39,12 @@ public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, Unit>
             .Where(r => r.UserId == request.UserId)
             .ToListAsync(cancellationToken);
         _context.MessageReactions.RemoveRange(reactions);
+        // Удаление MessageReactions
+        var logs = await _context.AuditLogs
+            .Where(r => r.UserId == request.UserId)
+            .ToListAsync(cancellationToken);
+        _context.AuditLogs.RemoveRange(logs);
+        
 
         // Пометка сообщений как удаленных
         var messages = await _context.Messages

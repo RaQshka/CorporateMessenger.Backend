@@ -1,4 +1,5 @@
 ﻿using Messenger.Application.Common.Exceptions;
+using Messenger.Application.Documents.Queries.Shared;
 using Messenger.Application.Interfaces;
 using Messenger.Application.Interfaces.Repositories;
 using Messenger.Application.Interfaces.Services;
@@ -143,7 +144,7 @@ public class DocumentService : IDocumentService
 
         await _documentRepository.DeleteAsync(documentId, ct);
     }
-    public async Task<IReadOnlyList<Document>> GetListByChatAsync(Guid chatId, Guid userId, CancellationToken ct)
+    public async Task<IReadOnlyList<DocumentDto>> GetListByChatAsync(Guid chatId, Guid userId, CancellationToken ct)
     {
         var chat = await _chatRepository.GetByIdAsync(chatId, ct)
                    ?? throw new NotFoundException("Чат", chatId);
@@ -152,7 +153,7 @@ public class DocumentService : IDocumentService
             throw new AccessDeniedException("Просмотр документов", chatId, userId);
 
         var documents = await _documentRepository.GetByChatAsync(chatId, ct);
-        var accessibleDocuments = new List<Document>();
+        var accessibleDocuments = new List<DocumentDto>();
         foreach (var document in documents)
         {
             if (await _documentAccessService.HasAccessAsync(document.Id, userId, DocumentAccess.ViewDocument, ct))

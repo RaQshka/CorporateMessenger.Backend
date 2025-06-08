@@ -51,6 +51,30 @@ public class ChatAccessService : IChatAccessService
         return (combinedMask & (int)accessFlag) == (int)accessFlag;
     }
 
+    public async Task<int> GetMaskAsync(Guid chatId, Guid userId, CancellationToken ct)
+    {
+        var chat = await _chatRepository.GetByIdAsync(chatId, ct)
+                   ?? throw new NotFoundException("Чат", chatId);
+
+        var user = await _userManager.FindByIdAsync(userId.ToString())
+                   ?? throw new NotFoundException("Пользователь", userId);
+        
+        if (chat.CreatedBy == userId || await IsAdminOfChat(chatId, userId, ct))
+            return 1023;
+        
+        var roles = await _userManager.GetRolesAsync(user);
+        if (roles.Count == 0) return 0;
+
+        int combinedMask = 0;
+        foreach (var role in roles)
+        {
+            var chatAccess = await _chatAccessRepository.GetRuleAsync(chatId, role, ct);
+            if (chatAccess != null)
+                combinedMask = chatAccess.AccessMask | combinedMask;
+        }
+
+        return combinedMask;
+    }
     public async Task SetMaskAsync(Guid chatId, Guid roleId, int mask, CancellationToken ct)
     {
         var chat = await _chatRepository.GetByIdAsync(chatId, ct)

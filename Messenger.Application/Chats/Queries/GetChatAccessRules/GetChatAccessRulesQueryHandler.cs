@@ -28,7 +28,7 @@ public class GetChatAccessRulesQueryHandler : IRequestHandler<GetChatAccessRules
         var hasAccess = await _accessService.HasAccessAsync(
             request.ChatId,
             request.InitiatorId,
-            ChatAccess.ManageAccess, // Предполагается, что для просмотра правил нужен ManageAccess
+            ChatAccess.ReadMessages, // Предполагается, что для просмотра правил нужен ManageAccess
             cancellationToken);
 
         if (!hasAccess)

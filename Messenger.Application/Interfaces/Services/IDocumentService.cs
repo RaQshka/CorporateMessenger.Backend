@@ -1,4 +1,5 @@
-﻿using Messenger.Domain.Entities;
+﻿using Messenger.Application.Documents.Queries.Shared;
+using Messenger.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 
 namespace Messenger.Application.Interfaces.Services;
@@ -11,6 +12,6 @@ public interface IDocumentService
         CancellationToken ct);
 
     Task DeleteAsync(Guid documentId, Guid userId, CancellationToken ct);
-    Task<IReadOnlyList<Document>> GetListByChatAsync(Guid chatId, Guid userId, CancellationToken ct);
+    Task<IReadOnlyList<DocumentDto>> GetListByChatAsync(Guid chatId, Guid userId, CancellationToken ct);
     Task<Document?> GetByIdAsync(Guid documentId, Guid userId, CancellationToken ct);
 }

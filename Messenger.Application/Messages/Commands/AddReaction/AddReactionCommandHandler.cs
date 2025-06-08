@@ -18,7 +18,11 @@ public class AddReactionCommandHandler : IRequestHandler<AddReactionCommand, Uni
     {
         if(await ExistingReaction(request, cancellationToken))
         {
-            throw new BusinessRuleException("Пользователь уже добавил реакцию к этому сообщению");
+            await _reactionService.RemoveAsync(
+                request.MessageId,
+                request.UserId,
+                cancellationToken);
+            //throw new BusinessRuleException("Пользователь уже добавил реакцию к этому сообщению");
         }
         await _reactionService.AddAsync(
             request.MessageId,
@@ -26,6 +30,8 @@ public class AddReactionCommandHandler : IRequestHandler<AddReactionCommand, Uni
             request.ReactionType,
             cancellationToken);
         return Unit.Value;
+        
+        
     }
     private async Task<bool> ExistingReaction(AddReactionCommand command, CancellationToken cancellationToken)
     {

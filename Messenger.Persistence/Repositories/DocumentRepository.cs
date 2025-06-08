@@ -1,5 +1,7 @@
-﻿using Messenger.Application.Interfaces;
+﻿using Messenger.Application.Documents.Queries.Shared;
+using Messenger.Application.Interfaces;
 using Messenger.Application.Interfaces.Repositories;
+using Messenger.Application.Messages.Queries.Shared;
 using Messenger.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -26,10 +28,26 @@ public class DocumentRepository : IDocumentRepository
             .FirstOrDefaultAsync(d => d.Id == documentId, ct);
     }
 
-    public async Task<IReadOnlyList<Document>> GetByChatAsync(Guid chatId, CancellationToken ct)
+    public async Task<IReadOnlyList<DocumentDto>> GetByChatAsync(Guid chatId, CancellationToken ct)
     {
         return await _context.Documents
             .Where(d => d.ChatId == chatId)
+            .Select(x=>new DocumentDto()
+            {
+                UploadedAt = x.UploadedAt,
+                Id = x.Id,
+                ChatId = x.ChatId,
+                FileName = x.FileName,
+                FileSize = x.FileSize,
+                FileType = x.FileType,
+                UploaderId = x.UploaderId,
+                Sender = new SenderInfoDto 
+                { 
+                    Id = x.UploaderId,
+                    FirstName = x.Uploader.FirstName, 
+                    LastName = x.Uploader.LastName 
+                },
+            })
             .OrderByDescending(d => d.UploadedAt)
             .ToListAsync(ct);
     }

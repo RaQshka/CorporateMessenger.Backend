@@ -2,6 +2,7 @@
 using Messenger.Application.Interfaces;
 using Messenger.Application.Interfaces.Repositories;
 using Messenger.Application.Interfaces.Services;
+using Messenger.Application.Messages.Queries.Shared;
 using Messenger.Domain.Entities;
 using Messenger.Domain.Enums;
 
@@ -67,7 +68,7 @@ public class MessageService : IMessageService
         return message.Id;
     }
 
-    public async Task<IReadOnlyList<Message>> GetByChatAsync(Guid chatId, Guid userId, int skip, int take, CancellationToken ct)
+    public async Task<IReadOnlyList<MessageDto>> GetByChatAsync(Guid chatId, Guid userId, int skip, int take, CancellationToken ct)
     {
         // Проверка существования чата
         var chat = await _chatRepository.GetByIdAsync(chatId, ct)
@@ -93,6 +94,7 @@ public class MessageService : IMessageService
 
         // Обновление содержимого
         message.Content = newContent ?? string.Empty;
+        message.SentAt = DateTime.UtcNow;
         await _messageRepository.UpdateAsync(message, ct);
     }
 

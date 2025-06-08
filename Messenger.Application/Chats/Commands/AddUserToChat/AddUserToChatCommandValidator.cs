@@ -10,7 +10,7 @@ public class AddUserToChatCommandValidator : AbstractValidator<AddUserToChatComm
             .NotEmpty().WithMessage("Идентификатор чата обязателен");
 
         RuleFor(x => x.UserId)
-            .NotEmpty().WithMessage("Идентификатор пользователя обязателен")
+            //.NotEmpty().WithMessage("Идентификатор пользователя обязателен")
             .NotEqual(x => x.InitiatorId).WithMessage("Нельзя добавить самого себя");
 
         RuleFor(x => x.InitiatorId)

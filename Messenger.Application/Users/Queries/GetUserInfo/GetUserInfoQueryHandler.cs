@@ -26,6 +26,8 @@ public class GetUserInfoQueryHandler : IRequestHandler<GetUserInfoQuery, UserDet
             return null;
         
         var dto = _mapper.Map<UserDetailsDto>(user);
+        
+        dto.Roles = (await _userManager.GetRolesAsync(user)).ToList();
 
         return dto;
     }

@@ -7,26 +7,27 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Messenger.Application.Users.Queries.GetUsers;
 
-public class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, List<UserDetailsDto>>
+public class GetFullUsersQueryHandler : IRequestHandler<GetFullUsersQuery, List<UserFullDetailsDto>>
 {
     private readonly UserManager<User> _userManager;
     private readonly IMapper _mapper;
 
-    public GetUsersQueryHandler(UserManager<User> userManager, IMapper mapper)
+    public GetFullUsersQueryHandler(UserManager<User> userManager, IMapper mapper)
     {
         _userManager = userManager;
         _mapper = mapper;
     }
 
-    public async Task<List<UserDetailsDto>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
+    public async Task<List<UserFullDetailsDto>> Handle(GetFullUsersQuery request, CancellationToken cancellationToken)
     {
         var users = _userManager.Users.ToList();
         
-        var dtos = new List<UserDetailsDto>();
+        var dtos = new List<UserFullDetailsDto>();
 
         foreach (var user in users)
         {
-            var dto = _mapper.Map<UserDetailsDto>(user);
+            var dto = _mapper.Map<UserFullDetailsDto>(user);
+            dto.Roles = await _userManager.GetRolesAsync(user);
             dtos.Add(dto);
         }
 

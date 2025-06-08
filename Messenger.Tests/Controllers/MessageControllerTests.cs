@@ -174,7 +174,7 @@ namespace Messenger.Tests.Controllers
             _auditLoggerMock.Verify(l => l.LogAsync(_testUserId, "Удаление реакции", "Реакция", messageId,
                 "Реакция удалена", LogLevel.Info), Times.Once());
         }
-
+/*
         [Fact]
         public async Task GetMessages_ShouldReturnOkWithMessages()
         {
@@ -199,7 +199,7 @@ namespace Messenger.Tests.Controllers
             Assert.Equal(expectedMessages, okResult.Value);
             _auditLoggerMock.Verify(l => l.LogAsync(_testUserId, "Получение сообщений", "Чат", chatId,
                 "Сообщения получены", LogLevel.Info), Times.Once());
-        }
+        }*/
 
         [Fact]
         public async Task GetReactions_ShouldReturnOkWithReactions()

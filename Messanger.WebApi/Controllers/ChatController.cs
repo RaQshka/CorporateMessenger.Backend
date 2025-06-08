@@ -11,6 +11,7 @@ using Messenger.Application.Chats.Queries.GetChatAccessRules;
 using Messenger.Application.Chats.Queries.GetChatActivity;
 using Messenger.Application.Chats.Queries.GetChatInfo;
 using Messenger.Application.Chats.Queries.GetChatParticipants;
+using Messenger.Application.Chats.Queries.GetUserChatAccess;
 using Messenger.Application.Chats.Queries.GetUserChats;
 using Messenger.Application.Interfaces;
 using Messenger.Application.Interfaces.Services;
@@ -122,6 +123,7 @@ public class ChatController : BaseController
         {
             ChatId = chatId,
             UserId = dto.UserId,
+            UserEmail = dto.UserEmail,
             InitiatorId = UserId
         };
         await _mediator.Send(command);
@@ -270,6 +272,19 @@ public class ChatController : BaseController
         var result = await _mediator.Send(query);
         await _auditLogger.LogAsync(UserId, "GetChatAccessRules", "Chat", chatId,
             "Правила доступа чата успешно получены");
+        return Ok(result);
+    }
+    [HttpGet("{chatId}/access/{userId}")]
+    public async Task<IActionResult> GetUserChatAccessRules(Guid chatId, Guid userId)
+    {
+        var query = new GetUserChatAccessQuery
+        {
+            ChatId = chatId,
+            InitiatorId = userId
+        };
+        var result = await _mediator.Send(query);
+        await _auditLogger.LogAsync(UserId, "GetUserChatAccessQuery", "Chat", chatId,
+            "Правила доступа пользователя успешно получены");
         return Ok(result);
     }
     

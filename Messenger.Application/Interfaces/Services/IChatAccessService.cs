@@ -42,4 +42,7 @@ public interface IChatAccessService
     /// Проверяет пользователя на наличие прав администратора чата.
     /// </summary>
     Task<bool> IsAdminOfChat(Guid chatId, Guid userId, CancellationToken ct);
+
+    Task<int> GetMaskAsync(Guid chatId, Guid userId, CancellationToken ct);
+
 }

@@ -11,6 +11,10 @@ public interface IChatParticipantService
     /// Добавляет пользователя в чат как участника (опционально администратора).
     /// </summary>
     Task AddAsync(Guid chatId, Guid userId, bool isAdmin, CancellationToken ct);
+    /// <summary>
+    /// Добавляет пользователя в чат как участника по его почте (опционально администратора).
+    /// </summary>
+    Task AddByEmailAsync(Guid chatId, string userEmail, bool isAdmin, CancellationToken ct);
 
     /// <summary>
     /// Удаляет пользователя из чата.

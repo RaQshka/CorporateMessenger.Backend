@@ -4,6 +4,8 @@ using Messenger.Application.Chats.Queries.Shared;
 using Messenger.Application.Documents.Queries.Shared;
 using Messenger.Application.Interfaces.Services;
 using Messenger.Application.Messages.Queries.Shared;
+using Messenger.Domain.Entities;
+using Messenger.Domain.Enums;
 
 namespace Messenger.Application.Chats.Queries.GetChatActivity;
 
@@ -20,10 +22,13 @@ public class GetChatActivityQueryHandler : IRequestHandler<GetChatActivityQuery,
         _mapper = mapper;
     }
 
-    public async Task<IReadOnlyList<ChatActivityDto>> Handle(GetChatActivityQuery request, CancellationToken cancellationToken)
+    public async Task<IReadOnlyList<ChatActivityDto>> Handle(GetChatActivityQuery request,
+        CancellationToken cancellationToken)
     {
-        var messages = await _messageService.GetByChatAsync(request.ChatId, request.UserId, 0, request.Take, cancellationToken);
+        var messages =
+            await _messageService.GetByChatAsync(request.ChatId, request.UserId, 0, request.Take, cancellationToken);
         var documents = await _documentService.GetListByChatAsync(request.ChatId, request.UserId, cancellationToken);
+
 
         var activity = messages.Select(m => new ChatActivityDto
             {
@@ -44,4 +49,6 @@ public class GetChatActivityQueryHandler : IRequestHandler<GetChatActivityQuery,
 
         return activity;
     }
+
+
 }

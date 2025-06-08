@@ -182,7 +182,7 @@ public class AuthController:BaseController
     public async Task<IActionResult> DeleteUser(DeleteUserCommand command)
     {
         var result = await _mediator.Send(command);
-        await _auditLogger.LogAsync(command.UserId, "DeleteUser", "User", command.UserId, "Пользователь был удален администратором.");
+        await _auditLogger.LogAsync(UserId, "DeleteUser", "User", command.UserId, "Пользователь был удален администратором.");
 
         return Ok();
     }
@@ -234,13 +234,22 @@ public class AuthController:BaseController
     }
     
     [Authorize(Roles = "Admin")]
+    [HttpGet("get-full-users")]
+    public async Task<IActionResult> GetFullUsers([FromQuery]GetFullUsersQuery command)
+    {
+        var result = await _mediator.Send(new GetFullUsersQuery());
+        
+        return Ok(result);
+    }
+    [Authorize]
     [HttpGet("get-users")]
-    public async Task<IActionResult> GetUsers()
+    public async Task<IActionResult> GetUsers([FromQuery]GetUsersQuery command)
     {
         var result = await _mediator.Send(new GetUsersQuery());
         
         return Ok(result);
     }
+
 
     [Authorize(Roles = "Admin")]
     [HttpGet("get-unconfirmed-users")]
