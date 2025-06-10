@@ -47,6 +47,8 @@ public class GetChatParticipantsQueryHandler : IRequestHandler<GetChatParticipan
         {
             var dto = _mapper.Map<ChatParticipantDto>(participant);
             dto.Username = participant.User.UserName;
+            dto.FirstName = participant.User.FirstName;
+            dto.LastName = participant.User.LastName;
             participantsDtos.Add(dto);
         }
   

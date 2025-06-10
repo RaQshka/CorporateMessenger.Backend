@@ -212,6 +212,89 @@ namespace Messenger.Persistence.Migrations
                     b.ToTable("DocumentAccessRules");
                 });
 
+            modelBuilder.Entity("Messenger.Domain.Entities.EncryptedDocument", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<byte[]>("FileData")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("FileSize")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("FileType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("IV")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<Guid>("SecureChatId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<byte[]>("Tag")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UploaderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SecureChatId");
+
+                    b.HasIndex("UploaderId");
+
+                    b.ToTable("EncryptedDocuments");
+                });
+
+            modelBuilder.Entity("Messenger.Domain.Entities.EncryptedMessage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<byte[]>("Content")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<byte[]>("IV")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<Guid>("SecureChatId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("SenderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<byte[]>("Tag")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SecureChatId");
+
+                    b.HasIndex("SenderId");
+
+                    b.ToTable("EncryptedMessages");
+                });
+
             modelBuilder.Entity("Messenger.Domain.Entities.Message", b =>
                 {
                     b.Property<Guid>("Id")
@@ -327,6 +410,62 @@ namespace Messenger.Persistence.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+                });
+
+            modelBuilder.Entity("Messenger.Domain.Entities.SecureChat", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AccessKey")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("CreatorId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("DestroyAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("Salt")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SecureChats");
+                });
+
+            modelBuilder.Entity("Messenger.Domain.Entities.SecureChatParticipant", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<byte[]>("PublicKey")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<Guid>("SecureChatId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SecureChatId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("SecureChatParticipants");
                 });
 
             modelBuilder.Entity("Messenger.Domain.Entities.User", b =>
@@ -627,6 +766,44 @@ namespace Messenger.Persistence.Migrations
                     b.Navigation("Role");
                 });
 
+            modelBuilder.Entity("Messenger.Domain.Entities.EncryptedDocument", b =>
+                {
+                    b.HasOne("Messenger.Domain.Entities.SecureChat", "SecureChat")
+                        .WithMany("Documents")
+                        .HasForeignKey("SecureChatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Messenger.Domain.Entities.User", "Uploader")
+                        .WithMany()
+                        .HasForeignKey("UploaderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SecureChat");
+
+                    b.Navigation("Uploader");
+                });
+
+            modelBuilder.Entity("Messenger.Domain.Entities.EncryptedMessage", b =>
+                {
+                    b.HasOne("Messenger.Domain.Entities.SecureChat", "SecureChat")
+                        .WithMany("Messages")
+                        .HasForeignKey("SecureChatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Messenger.Domain.Entities.User", "Sender")
+                        .WithMany()
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SecureChat");
+
+                    b.Navigation("Sender");
+                });
+
             modelBuilder.Entity("Messenger.Domain.Entities.Message", b =>
                 {
                     b.HasOne("Messenger.Domain.Entities.Chat", "Chat")
@@ -679,6 +856,25 @@ namespace Messenger.Persistence.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Messenger.Domain.Entities.SecureChatParticipant", b =>
+                {
+                    b.HasOne("Messenger.Domain.Entities.SecureChat", "SecureChat")
+                        .WithMany("Participants")
+                        .HasForeignKey("SecureChatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Messenger.Domain.Entities.User", "User")
+                        .WithMany("SecureChatParticipants")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SecureChat");
 
                     b.Navigation("User");
                 });
@@ -750,6 +946,15 @@ namespace Messenger.Persistence.Migrations
                     b.Navigation("Reactions");
                 });
 
+            modelBuilder.Entity("Messenger.Domain.Entities.SecureChat", b =>
+                {
+                    b.Navigation("Documents");
+
+                    b.Navigation("Messages");
+
+                    b.Navigation("Participants");
+                });
+
             modelBuilder.Entity("Messenger.Domain.Entities.User", b =>
                 {
                     b.Navigation("ChatParticipants");
@@ -757,6 +962,8 @@ namespace Messenger.Persistence.Migrations
                     b.Navigation("Documents");
 
                     b.Navigation("Messages");
+
+                    b.Navigation("SecureChatParticipants");
                 });
 #pragma warning restore 612, 618
         }

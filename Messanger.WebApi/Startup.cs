@@ -12,7 +12,11 @@ using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using NSwag;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using OpenApiInfo = Microsoft.OpenApi.Models.OpenApiInfo;
+using OpenApiSecurityRequirement = Microsoft.OpenApi.Models.OpenApiSecurityRequirement;
+using OpenApiSecurityScheme = Microsoft.OpenApi.Models.OpenApiSecurityScheme;
 
 namespace Messenger.WebApi
 {
@@ -26,7 +30,9 @@ namespace Messenger.WebApi
         }
 
         public void ConfigureServices(IServiceCollection services)
-        {
+        {            
+
+            services.AddHostedService<SecureChatCleanupService>();
             services.AddAutoMapper(config =>
             {
                 config.AddProfile(new AssemblyMappingProfile(Assembly.GetExecutingAssembly()));
@@ -34,13 +40,13 @@ namespace Messenger.WebApi
             });
 
             services.AddApplication();
+            
             services.AddPersistance(_configuration);
+            
             services.AddControllers();            
-            /*services.AddAntiforgery(options =>
-            {
-                options.HeaderName = "X-CSRF-TOKEN"; // Имя заголовка для токена
-            });*/
+            
             services.AddHttpContextAccessor();
+            
             services.AddTransient<MessengerDbContextFactory>();
             services.AddCors(options =>
             {
@@ -127,6 +133,7 @@ namespace Messenger.WebApi
                     } 
                 });
             });
+            services.AddOpenApiDocument();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env /*,

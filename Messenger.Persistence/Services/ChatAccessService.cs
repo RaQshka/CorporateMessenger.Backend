@@ -123,9 +123,9 @@ public class ChatAccessService : IChatAccessService
         var existing = await _chatAccessRepository.GetRuleAsync(chatId, roleId, ct)
                        ?? throw new NotFoundException("Правило доступа", $"ChatId: {chatId}, RoleId: {roleId}");
 
-        var newMask = existing.AccessMask | (int)rights;
+        existing.AccessMask = existing.AccessMask | (int)rights;
         await _chatAccessRepository.UpdateRuleAsync(
-            new ChatAccessRule { ChatId = chatId, RoleId = roleId, AccessMask = newMask },
+            existing,
             ct);
     }
     public async Task RevokeAccessAsync(Guid chatId, Guid roleId, ChatAccess rights, CancellationToken ct)
@@ -136,14 +136,9 @@ public class ChatAccessService : IChatAccessService
         var existing = await _chatAccessRepository.GetRuleAsync(chatId, roleId, ct)
                        ?? throw new NotFoundException("Правило доступа", $"ChatId: {chatId}, RoleId: {roleId}");
 
-        var updatedMask = existing.AccessMask & ~(int)rights;
-        var chatAccessRule = new ChatAccessRule
-        {
-            ChatId = chatId,
-            RoleId = roleId,
-            AccessMask = updatedMask
-        };
-        await _chatAccessRepository.UpdateRuleAsync(chatAccessRule, ct);
+        existing.AccessMask = existing.AccessMask & ~(int)rights;
+
+        await _chatAccessRepository.UpdateRuleAsync(existing, ct);
     }
 
     public async Task<bool> IsAdminOfChat(Guid chatId, Guid userId, CancellationToken ct)

@@ -245,7 +245,7 @@ public class AuthController:BaseController
     [HttpGet("get-users")]
     public async Task<IActionResult> GetUsers([FromQuery]GetUsersQuery command)
     {
-        var result = await _mediator.Send(new GetUsersQuery());
+        var result = await _mediator.Send(command);
         
         return Ok(result);
     }

@@ -20,6 +20,10 @@ public interface IChatParticipantService
     /// Удаляет пользователя из чата.
     /// </summary>
     Task RemoveAsync(Guid chatId, Guid userId, CancellationToken ct);
+    /// <summary>
+    /// Удаляет пользователя из чата по email.
+    /// </summary>
+    Task RemoveByEmailAsync(Guid chatId, string userEmail, CancellationToken ct);
 
     /// <summary>
     /// Назначает или снимает роль администратора у участника чата.

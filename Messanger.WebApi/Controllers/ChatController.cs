@@ -139,12 +139,13 @@ public class ChatController : BaseController
     /// <param name="userId">ID пользователя</param>
     /// <returns>Статус удаления</returns>
     [HttpDelete("{chatId}/users/{userId}")]
-    public async Task<IActionResult> RemoveUserFromChat(Guid chatId, Guid userId)
+    public async Task<IActionResult> RemoveUserFromChat(Guid chatId, Guid userId, string? userEmail = null)
     {
         var command = new RemoveUserFromChatCommand
         {
             ChatId = chatId,
             UserId = userId,
+            UserEmail = userEmail,
             InitiatorId = UserId
         };
         await _mediator.Send(command);

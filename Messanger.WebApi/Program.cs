@@ -24,6 +24,7 @@ namespace Messenger.WebApi
                 {
                     //var context = scope.ServiceProvider.GetRequiredService<MessengerDbContext>();
                     await DbInitializer.InitializeAsync(scope.ServiceProvider);
+                    
                 }
 
             }

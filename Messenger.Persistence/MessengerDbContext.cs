@@ -24,12 +24,13 @@ public class MessengerDbContext: IdentityDbContext<User, Role, Guid>, IMessenger
     public DbSet<Document> Documents { get; set; }
     public DbSet<AuditLog> AuditLogs { get; set; }
     public DbSet<Role> Roles { get; set; }
-    //public DbSet<UserRole> UserRoles { get; set; }
     public DbSet<DocumentAccessRule> DocumentAccessRules { get; set; }
     public DbSet<ChatAccessRule> ChatAccessRules { get; set; }
-    /*
-    public DbSet<ChatAccessRuleRole> ChatAccessRuleRoles { get; set; }
-    */
+   
+    public DbSet<SecureChatParticipant> SecureChatParticipants { get; set; }
+    public DbSet<SecureChat> SecureChats { get; set; }
+    public DbSet<EncryptedMessage> EncryptedMessages { get; set; }
+    public DbSet<EncryptedDocument> EncryptedDocuments { get; set; }
     public DbSet<RefreshToken> RefreshTokens { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {        
@@ -44,5 +45,7 @@ public class MessengerDbContext: IdentityDbContext<User, Role, Guid>, IMessenger
         modelBuilder.ApplyConfiguration(new AuditLogConfiguration());
         modelBuilder.ApplyConfiguration(new DocumentAccessRuleConfiguration());
         modelBuilder.ApplyConfiguration(new ChatAccessRuleConfiguration());
+        modelBuilder.ApplyConfiguration(new SecureChatConfiguration());
+        
     }
 }

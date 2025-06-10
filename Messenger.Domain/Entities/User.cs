@@ -16,4 +16,7 @@ public class User : IdentityUser<Guid>
     public ICollection<ChatParticipant> ChatParticipants { get; set; } = new List<ChatParticipant>();
     public ICollection<Message> Messages { get; set; } = new List<Message>();
     public ICollection<Document> Documents { get; set; } = new List<Document>();
+    //безопасный чат
+    public ICollection<SecureChatParticipant> SecureChatParticipants { get; set; } = new List<SecureChatParticipant>();
+    
 }

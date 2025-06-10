@@ -35,11 +35,23 @@ public class RemoveUserFromChatCommandHandler : IRequestHandler<RemoveUserFromCh
             throw new AccessDeniedException("Удаление пользователя из чата", request.ChatId, request.InitiatorId);
         }
 
-        await _participantService.RemoveAsync(
-            request.ChatId,
-            request.UserId,
-            cancellationToken);
+        if (request.UserId != Guid.Empty)
+        {
+        
+            await _participantService.RemoveAsync(
+                request.ChatId,
+                request.UserId,
+                cancellationToken);
+    
+        }
+        else if (request.UserEmail != string.Empty)
+        {
+            await _participantService.RemoveByEmailAsync(
+                request.ChatId,
+                request.UserEmail,
+                cancellationToken);
 
+        }
         return Unit.Value;
     }
 }

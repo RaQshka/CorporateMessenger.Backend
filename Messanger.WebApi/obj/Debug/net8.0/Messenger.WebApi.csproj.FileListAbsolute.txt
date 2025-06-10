@@ -202,3 +202,16 @@ C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messang
 C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messanger.WebApi\bin\Debug\net8.0\Newtonsoft.Json.dll
 C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messanger.WebApi\bin\Debug\net8.0\Newtonsoft.Json.Bson.dll
 C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messanger.WebApi\bin\Debug\net8.0\System.Net.WebSockets.WebSocketProtocol.dll
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messanger.WebApi\bin\Debug\net8.0\nswag.json
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messanger.WebApi\bin\Debug\net8.0\Namotion.Reflection.dll
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messanger.WebApi\bin\Debug\net8.0\NJsonSchema.dll
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messanger.WebApi\bin\Debug\net8.0\NJsonSchema.Annotations.dll
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messanger.WebApi\bin\Debug\net8.0\NJsonSchema.NewtonsoftJson.dll
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messanger.WebApi\bin\Debug\net8.0\NJsonSchema.Yaml.dll
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messanger.WebApi\bin\Debug\net8.0\NSwag.Annotations.dll
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messanger.WebApi\bin\Debug\net8.0\NSwag.AspNetCore.dll
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messanger.WebApi\bin\Debug\net8.0\NSwag.Core.dll
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messanger.WebApi\bin\Debug\net8.0\NSwag.Core.Yaml.dll
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messanger.WebApi\bin\Debug\net8.0\NSwag.Generation.dll
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messanger.WebApi\bin\Debug\net8.0\NSwag.Generation.AspNetCore.dll
+C:\Users\User\source\repos\CorporateMessenger\CorporateMessenger.Backend\Messanger.WebApi\bin\Debug\net8.0\YamlDotNet.dll

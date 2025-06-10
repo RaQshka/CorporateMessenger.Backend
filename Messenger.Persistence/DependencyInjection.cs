@@ -51,6 +51,12 @@ public static class DependencyInjection
         services.AddScoped<IDocumentAccessRepository, DocumentAccessRepository>();
         services.AddScoped<IReactionRepository, ReactionRepository>();
         
+        services.AddScoped<ISecureChatRepository,SecureChatRepository>();
+        services.AddScoped<ISecureChatParticipantRepository,SecureChatParticipantRepository>();
+        services.AddScoped<IEncryptedMessageRepository, EncryptedMessageRepository>();
+        services.AddScoped<IEncryptedDocumentRepository, EncryptedDocumentRepository>();
+        
+        //сервисы чата
         services.AddScoped<IChatService, ChatService>();
         services.AddScoped<IChatAccessService, ChatAccessService>();
         services.AddScoped<IChatParticipantService, ChatParticipantService>();
@@ -60,6 +66,9 @@ public static class DependencyInjection
         services.AddScoped<IDocumentService,DocumentService>();
         services.AddScoped<IDocumentAccessService, DocumentAccessService>();
 
+        services.AddScoped<ISecureChatService, SecureChatService>();
+        services.AddScoped<IEncryptedDocumentService,EncryptedDocumentService>();
+        services.AddScoped<IEncryptedMessageService, EncryptedMessageService>();
 
         return services;
     }

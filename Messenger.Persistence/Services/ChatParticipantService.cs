@@ -98,6 +98,20 @@ public class ChatParticipantService : IChatParticipantService
         await _chatParticipantRepository.RemoveAsync(chatId, userId, ct);
     }
     
+    public async Task RemoveByEmailAsync(Guid chatId, string userEmail, CancellationToken ct)
+    {
+        var chat = await _chatRepository.GetByIdAsync(chatId, ct)
+                   ?? throw new NotFoundException("Чат", chatId);
+
+        var user = await _userManager.FindByEmailAsync(userEmail)
+                   ?? throw new NotFoundException("Пользователь", userEmail);
+
+        if (chat.CreatedBy == user.Id)
+            throw new BusinessRuleException("Нельзя удалить создателя чата");
+
+        await _chatParticipantRepository.RemoveAsync(chatId, user.Id, ct);
+    }
+    
     public async Task SetAdminAsync(Guid chatId, Guid userId, bool isAdmin, CancellationToken ct)
     {
         var chat = await _chatRepository.GetByIdAsync(chatId, ct)
